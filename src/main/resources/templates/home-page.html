@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home Page</title>
+    <style>
+
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(to right, #e6f0ff, #ffffff); margin: 0; padding: 40px; }
+        .dashboard {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .action {
+            margin: 20px 0;
+        }
+
+        .action label {
+            display: block;
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: #444;
+            font-weight: 600;
+        }
+
+        .action a button {
+            padding: 12px 30px;
+            font-size: 16px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .action a button:hover {
+            background-color: #0056b3;
+        }
+
+        .footer {
+            margin-top: 40px;
+            font-size: 14px;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+<div class="dashboard">
+<h1>WORD PRESS</h1>
+    <div class="action">
+        <label>Register user</label>
+        <a th:href="@{/home-page/register-user}">
+            <button>Add a USER</button>
+        </a>
+    </div>
+
+    <div class="action">
+        <label>add a blog</label>
+        <a th:href="@{/home-page/add-blog/{userId}}">
+            <button>Add a Blog</button>
+        </a>
+    </div>
+
+    <div class="action">
+        <label>view all blogs</label>
+        <a th:href="@{/home-page/show-all-blogs}">
+            <button>View Blogs</button>
+        </a>
+    </div>
+
+    <div class="action">
+        <label>view user blogs</label>
+        <a th:href="@{/home-page/show-blog/{userId}}">
+            <button>View User Blogs</button>
+        </a>
+    </div>
+
+
+    <div class="footer">
+        &copy; 2025 WordPress Lite | Crafted with ♥
+    </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WRITE BLOG</title>
+
+    <style>
+        /* Reset some default margins and set base font */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            margin: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        form {
+            width: 500px;
+            background: #fff;
+            padding: 30px 40px;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-top: 20px;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+            font-size: 1.1rem;
+        }
+
+        input[type="text"],
+        textarea {
+            padding: 12px 15px;
+            font-size: 1rem;
+            border: 1.5px solid #ddd;
+            border-radius: 6px;
+            transition: border-color 0.3s ease;
+            resize: vertical;
+        }
+
+        input[type="text"]:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #4a90e2;
+            box-shadow: 0 0 5px rgba(74, 144, 226, 0.5);
+            background-color: #fefeff;
+        }
+
+        textarea {
+            min-height: 180px;
+            font-family: inherit;
+        }
+
+        button {
+            margin-top: 30px;
+            padding: 14px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #fff;
+            background-color: #4a90e2;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, box-shadow 0.2s ease;
+        }
+
+        button:hover {
+            background-color: #357abd;
+            box-shadow: 0 4px 12px rgba(53, 122, 189, 0.5);
+        }
+
+        button:active {
+            background-color: #2a5d91;
+        }
+    </style>
+</head>
+<body>
+<form th:action="@{'/blog/save/' + ${userId}}" th:object="${blog}" method="post">
+    <h1>Add New Blog Entry</h1>
+
+    <label for="title">Title:</label>
+    <input type="text" th:field="*{title}" id="title" required />
+
+    <label for="content">Content:</label>
+    <textarea th:field="*{content}" id="content" required></textarea>
+
+    <button type="submit">Submit Blog</button>
+</form>
+
+</body>
+</html>
