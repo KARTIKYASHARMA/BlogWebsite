@@ -7,14 +7,12 @@ import net.sample.wordpress.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Controller
+@RequestMapping("/user/home-page")
 public class WordPressBlogController {
 
     @Autowired
@@ -23,7 +21,7 @@ public class WordPressBlogController {
     @Autowired
     private BlogService blogService;
 
-    @GetMapping("/home-page/add-blog/{userId}")
+    @GetMapping("/add-blog/{userId}")
     public String addBlog(Model model,@PathVariable long userId) {
 
         User user= userService.findById(userId);
@@ -50,13 +48,13 @@ public class WordPressBlogController {
         blog.setUser(user); // assuming WordPressBlog has a `User` reference
         blogService.saveBlog(blog);
 
-        return "redirect:/home-page"; // or any success page
+        return "redirect:/home-page/"; // or any success page
     }
 
 
     // get all blogs
 
-    @GetMapping("home-page/show-all-blogs")
+    @GetMapping("/show-all-blogs")
     public String showAllBlogs(Model model) {
         List<Blog> blogList=blogService.getAllBlogs();
         model.addAttribute("blogList", blogList);
@@ -65,7 +63,7 @@ public class WordPressBlogController {
 
     }
 
-    @GetMapping("home-page/show-blog/{userId}")
+    @GetMapping("/show-blog/{userId}")
     public String showUserBlog(@PathVariable long userId, Model model)
     {
         User user=userService.findById(userId);

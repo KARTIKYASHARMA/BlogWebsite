@@ -20,6 +20,8 @@ public class User {
     String username;
     String password;
     String email;
+    @Enumerated(EnumType.STRING)
+    Role role;
 
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

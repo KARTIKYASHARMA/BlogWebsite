@@ -10,10 +10,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
 @Controller
+@RequestMapping("/user/home-page")
 public class UserController {
 
     @Autowired
@@ -22,20 +24,22 @@ public class UserController {
     @Autowired
     private BlogService blogService;
 
-    @GetMapping("/home-page")
+
+
+    @GetMapping("/")
     public String homePage(Model model) {
         List<Blog> blogs = blogService.getAllBlogs();
         model.addAttribute("blogs", blogs);
         return "home-page";
     }
 
-    @GetMapping("/home-page/register-user")
+    @GetMapping("/register-user")
     public String registerUser(Model model) {
         User user =new User();
         model.addAttribute("user", user);
         return "register-user";
     }
-    @PostMapping("/home-page/user-saved")
+    @PostMapping("/user-saved")
     public String addUserToDatabase(Model model, @ModelAttribute User user)
     {
         model.addAttribute("user", user);
