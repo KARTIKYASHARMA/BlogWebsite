@@ -1,8 +1,10 @@
 package net.sample.wordpress.controller;
 
+import jakarta.servlet.http.Cookie;
 import net.sample.wordpress.entity.Blog;
 import net.sample.wordpress.entity.User;
 import net.sample.wordpress.service.BlogService;
+import net.sample.wordpress.service.JwtService;
 import net.sample.wordpress.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 @RequestMapping("/user/home-page")
@@ -20,10 +23,19 @@ public class WordPressBlogController {
 
     @Autowired
     private BlogService blogService;
+    @Autowired
+    JwtService jwtService;
+    //private HttpServletRequest request;
 
-    @GetMapping("/add-blog/{userId}")
-    public String addBlog(Model model,@PathVariable long userId) {
 
+
+    @GetMapping("/add-blog/")
+    public String addBlog(Model model,HttpServletRequest request) {
+        String jwtToken = extractJwtFromCookies(request);
+        if (jwtToken == null) {
+            return "redirect:/login";
+        }
+        Long userId=jwtService.extractUserId(jwtToken);
         User user= userService.findById(userId);
 
         if(user==null)
@@ -48,7 +60,7 @@ public class WordPressBlogController {
         blog.setUser(user); // assuming WordPressBlog has a `User` reference
         blogService.saveBlog(blog);
 
-        return "redirect:/home-page/"; // or any success page
+        return "redirect:/user/home-page/show-all-blogs"; // or any success page
     }
 
 
@@ -78,6 +90,15 @@ public class WordPressBlogController {
 
         return "show-blog";
     }
-
+    private String extractJwtFromCookies(HttpServletRequest request) {
+        if (request.getCookies() != null) {
+            for (Cookie cookie : request.getCookies()) {
+                if ("jwt".equals(cookie.getName())) {
+                    return cookie.getValue();
+                }
+            }
+        }
+        return null;
+    }
 
 }

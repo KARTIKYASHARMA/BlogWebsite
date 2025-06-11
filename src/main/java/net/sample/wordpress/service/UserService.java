@@ -57,8 +57,8 @@ public class UserService {
             System.out.println("Password matches: " + matches);
 
             if (authentication.isAuthenticated()) {
-                System.out.println("token:"+jwtService.generateToken(user.getUsername()));
-                return jwtService.generateToken(user.getUsername());
+                System.out.println("token:"+jwtService.generateToken(userFromDb.getUsername(),userFromDb.getUserId()));
+                return jwtService.generateToken(userFromDb.getUsername(),userFromDb.getUserId());
             }
         } catch (Exception e) {
             e.printStackTrace();

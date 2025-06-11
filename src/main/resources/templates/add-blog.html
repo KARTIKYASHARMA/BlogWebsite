@@ -87,7 +87,7 @@
     </style>
 </head>
 <body>
-<form th:action="@{'/blog/save/' + ${userId}}" th:object="${blog}" method="post">
+<form th:action="@{'/user/home-page/blog/save/' + ${userId}}" th:object="${blog}" method="post">
     <h1>Add New Blog Entry</h1>
 
     <label for="title">Title:</label>

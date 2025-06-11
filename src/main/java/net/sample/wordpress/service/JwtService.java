@@ -21,8 +21,9 @@ public class JwtService {
     @Value("${jwt.secret}")
     private String secretKey;
 
-    public String generateToken(String username) {
+    public String generateToken(String username,Long userId) {
         Map<String, Object> claims = new HashMap<String, Object>();
+        claims.put("userId", userId);
         return Jwts.builder()
                 .claims()
                 .add(claims)
@@ -69,6 +70,12 @@ public class JwtService {
     private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
+    public Long extractUserId(String token) {
+        Claims claims = extractAllClaims(token);
+        return claims.get("userId", Long.class);
+    }
+
+
 
 
 }

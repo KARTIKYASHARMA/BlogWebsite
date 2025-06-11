@@ -58,16 +58,16 @@
 <body>
 <div class="dashboard">
 <h1>WORD PRESS</h1>
-    <div class="action">
-        <label>Register user</label>
-        <a th:href="@{/home-page/register-user}">
-            <button>Add a USER</button>
-        </a>
-    </div>
+<!--    <div class="action">-->
+<!--        <label>Register user</label>-->
+<!--        <a th:href="@{/user/home-page/register-user}">-->
+<!--            <button>Add a USER</button>-->
+<!--        </a>-->
+<!--    </div>-->
 
     <div class="action">
         <label>add a blog</label>
-        <a th:href="@{/home-page/add-blog/{userId}}">
+        <a th:href="@{/user/home-page/add-blog/}">
             <button>Add a Blog</button>
         </a>
     </div>
@@ -81,7 +81,7 @@
 
     <div class="action">
         <label>view user blogs</label>
-        <a th:href="@{/home-page/show-blog/{userId}}">
+        <a th:href="@{user/home-page/show-blog/{userId}}">
             <button>View User Blogs</button>
         </a>
     </div>
