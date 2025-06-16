@@ -1,25 +1,97 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head><title>Register</title></head>
+<head>
+    <title>Register</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #74ebd5 0%, #9face6 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        form {
+            background-color: #ffffff;
+            padding: 30px 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        p[th\\:text] {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+    </style>
+</head>
 <body>
-<h2>Register</h2>
 <form th:action="@{/register}" th:object="${user}" method="post">
-    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+    <h2>Register</h2>
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 
     <label>Username:</label>
-    <input type="text" th:field="*{username}" required><br/>
+    <input type="text" th:field="*{username}" required />
+
+    <label>Email:</label>
+    <input type="text" th:field="*{email}" required />
 
     <label>Password:</label>
-    <input type="password" th:field="*{password}" required><br/>
+    <input type="password" th:field="*{password}" required />
 
     <label>Role:</label>
     <select th:field="*{role}">
         <option value="USER">USER</option>
         <option value="ADMIN">ADMIN</option>
-    </select><br/>
+    </select>
 
     <button type="submit">Register</button>
+
+    <p th:text="${error}" style="color:red;"></p>
 </form>
-<p th:text="${error}" style="color:red;"></p>
 </body>
 </html>

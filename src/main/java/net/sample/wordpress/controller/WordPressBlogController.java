@@ -11,7 +11,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
@@ -25,6 +29,8 @@ public class WordPressBlogController {
     private BlogService blogService;
     @Autowired
     JwtService jwtService;
+
+
     //private HttpServletRequest request;
 
 
@@ -67,9 +73,29 @@ public class WordPressBlogController {
     // get all blogs
 
     @GetMapping("/show-all-blogs")
-    public String showAllBlogs(Model model) {
+    public String showAllBlogs(Model model,HttpServletRequest request) {
+        //String jwtToken = extractJwtFromCookies(request);
         List<Blog> blogList=blogService.getAllBlogs();
+
+
+        List<Long> userIds = new ArrayList<>();
+        Set<Long> uniqueValues = new HashSet<>();
+        for (Blog blog : blogList) {
+            Long userId = blog.getUser().getUserId();
+            if (uniqueValues.add(userId)) {
+                userIds.add(userId);
+            }
+        }
+
+        List<User> users =userService.findAllById(userIds);
+
+        Map<Long, String> userIdToUsername = users.stream()
+                .collect(Collectors.toMap(User::getUserId, User::getUsername));
+
+
+
         model.addAttribute("blogList", blogList);
+        model.addAttribute("usernames",userIdToUsername);
         return "show-all-blogs";
 
 

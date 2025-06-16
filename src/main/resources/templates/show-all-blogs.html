@@ -431,10 +431,9 @@
                   A
                 </div>
                 <div class="author-details">
-                  <div class="author-name">
-                    <!-- Static value, can be replaced with th:text="${blog.author.name}" -->
-                    Admin
-                  </div>
+                  <div class="author-name" th:text="${usernames[blog.user.userId]}">Author Name</div>
+
+
                   <div class="blog-date">
                     <!-- Static value, can be replaced with th:text="${#dates.format(blog.createdDate, 'MMM dd, yyyy')}" -->
                     Mar 21, 2023

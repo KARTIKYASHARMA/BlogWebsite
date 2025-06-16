@@ -46,6 +46,10 @@ public class BlogService {
         return blogRepository.findAll();
     }
 
+    public List<Long> getAllUserIds() {
+        return blogRepository.findAllUserIds();
+    }
+
 
 
 

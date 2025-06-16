@@ -19,6 +19,8 @@ public class Blog {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
+
+
     @ManyToOne
     @JoinColumn(name = "user_id",referencedColumnName = "userId")
     @ToString.Exclude
