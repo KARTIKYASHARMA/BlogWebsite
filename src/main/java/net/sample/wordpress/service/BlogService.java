@@ -51,10 +51,7 @@ public class BlogService {
     }
 
 
-
-
-
-
-
-
+    public Blog findById(Long blogId) {
+        return blogRepository.findById(blogId).orElse(null);
+    }
 }

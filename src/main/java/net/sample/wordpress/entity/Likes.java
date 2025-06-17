@@ -1,6 +1,10 @@
 package net.sample.wordpress.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
+
+@Entity
+@Data
 
 public class Likes {
     @Id

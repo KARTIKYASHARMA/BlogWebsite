@@ -402,8 +402,37 @@
 <div class="blog-section">
   <div class="container">
     <h2 class="section-title">Latest Stories</h2>
+    <div th:if="${message}" class="alert alert-info text-center">
+      <p th:text="${message}"></p>
+    </div>
+
 
     <div th:if="${#lists.isEmpty(blogList)}" class="no-blogs">
+      <!-- Show Existing Comments -->
+      <div class="ps-3 pt-2">
+        <h6>Comments:</h6>
+        <div th:if="${blog.comments != null and !#lists.isEmpty(blog.comments)}">
+          <ul class="list-unstyled">
+            <li th:each="comment : ${blog.comments}">
+              <strong th:text="${comment.user.username}">Username</strong>:
+              <span th:text="${comment.comment}">Sample comment</span>
+            </li>
+          </ul>
+        </div>
+        <div th:if="${blog.comments == null or #lists.isEmpty(blog.comments)}" class="text-muted">
+          No comments yet.
+        </div>
+      </div>
+      <!-- Add Comment Form -->
+      <form th:action="@{/post}" method="post" class="ps-3 pt-2">
+        <input type="hidden" name="blogId" th:value="${blog.blogId}" />
+        <div class="mb-2">
+          <textarea name="commentText" class="form-control" rows="2" placeholder="Write a comment..." required></textarea>
+        </div>
+        <button type="submit" class="btn btn-sm btn-outline-primary">Post Comment</button>
+      </form>
+
+
       <i class="fas fa-pen-fancy" style="font-size: 3rem; margin-bottom: 20px; color: #ddd;"></i>
       <p>No blog entries found. Check back soon for inspiring content!</p>
     </div>
@@ -450,13 +479,43 @@
                 <div class="stat-item">
                   <i class="far fa-comment"></i>
                   <!-- Static value, can be replaced with th:text="${blog.commentCount}" -->
-                  <span>0 comments</span>
+                  <span th:text="${#lists.size(blog.comments)} + ' comments'">0 comments</span>
+
                 </div>
-                <button class="like-btn">
-                  <i class="far fa-heart"></i>
-                  <!-- Static value, can be replaced with th:text="${blog.likeCount}" -->
-                  <span>2</span>
-                </button>
+                <div class="ps-3 pt-2">
+                  <h6>Comments:</h6>
+                  <div th:if="${blog.comments != null and !#lists.isEmpty(blog.comments)}">
+                    <ul class="list-unstyled">
+                      <li th:each="comment : ${blog.comments}">
+                        <strong th:text="${comment.user.username}">Username</strong>:
+                        <span th:text="${comment.comment}">Sample comment</span>
+                      </li>
+                    </ul>
+                  </div>
+                  <div th:if="${blog.comments == null or #lists.isEmpty(blog.comments)}" class="text-muted">
+                    No comments yet.
+                  </div>
+                </div>
+
+                <!-- 📝 Dynamic Add Comment Form -->
+                <form th:action="@{/post}" method="post" class="ps-3 pt-2">
+                  <input type="hidden" name="blogId" th:value="${blog.blogId}" />
+                  <div class="mb-2">
+                    <textarea name="commentText" class="form-control" rows="2" placeholder="Write a comment..." required></textarea>
+                  </div>
+                  <button type="submit" class="btn btn-sm btn-outline-primary">Post Comment</button>
+                </form>
+              </div>
+            </div>
+                <form th:action="@{/like}" method="post">
+                  <input type="hidden" name="userId" th:value="${currentUserId}" />
+                  <input type="hidden" name="blogId" th:value="${blog.blogId}" />
+                  <button type="submit" class="like-btn">
+                    <i class="far fa-heart"></i>
+                    <span th:text="${blog.likeCount}">0</span>
+                  </button>
+                </form>
+
               </div>
             </div>
           </div>
