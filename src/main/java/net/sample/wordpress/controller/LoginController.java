@@ -35,6 +35,7 @@ public class LoginController {
             // Store token in a secure, HttpOnly cookie
             Cookie cookie = new Cookie("jwt", token);
             cookie.setHttpOnly(true); // Not accessible via JavaScript
+            cookie.setSecure(false);
             cookie.setPath("/");
             cookie.setMaxAge(10 * 60); // 10 minutes
             response.addCookie(cookie);
@@ -45,13 +46,13 @@ public class LoginController {
             return "login";
         }
     }
-
-    @GetMapping("/logout")
-    public String logout(HttpServletResponse response) {
-        Cookie cookie = new Cookie("jwt", "");
-        cookie.setMaxAge(0); // Delete the cookie
-        cookie.setPath("/");
-        response.addCookie(cookie);
-        return "redirect:/login";
-    }
+//
+//    @GetMapping("/logout")
+//    public String logout(HttpServletResponse response) {
+//        Cookie cookie = new Cookie("jwt", "");
+//        cookie.setMaxAge(0); // Delete the cookie
+//        cookie.setPath("/");
+//        response.addCookie(cookie);
+//        return "redirect:/login";
+//    }
 }

@@ -21,7 +21,8 @@ public interface UserBlogMapper {
 
     User userDTOToUser(UserDTO userDTO);
 
-    Blog blogDTOToBlog(BlogDTO blogDTO);
+
+
     @Mapping(target = "user", ignore = true) // You will set user manually when converting BlogDto to Blog
     Blog blogDtoToBlog(BlogDTO dto);
 

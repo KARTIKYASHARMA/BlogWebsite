@@ -5,6 +5,7 @@ import net.sample.wordpress.entity.Blog;
 import net.sample.wordpress.entity.User;
 import net.sample.wordpress.service.BlogService;
 import net.sample.wordpress.service.JwtService;
+import net.sample.wordpress.service.LikesService;
 import net.sample.wordpress.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,6 +30,8 @@ public class WordPressBlogController {
     private BlogService blogService;
     @Autowired
     JwtService jwtService;
+    @Autowired
+    private LikesService likesService;
 
 
     //private HttpServletRequest request;
@@ -42,15 +45,16 @@ public class WordPressBlogController {
             return "redirect:/login";
         }
         Long userId=jwtService.extractUserId(jwtToken);
-        User user= userService.findById(userId);
+       /* User user= userService.findById(userId);
 
         if(user==null)
         {
             return "user-not-found";
         }
         System.out.println("User: "+user.getUserId());
+
+        model.addAttribute("user", user);*/
         Blog blog = new Blog();
-        model.addAttribute("user", user);
         model.addAttribute("userId", userId);
         model.addAttribute("blog", blog);
         return "add-blog";
@@ -79,16 +83,16 @@ public class WordPressBlogController {
 
 
         List<Long> userIds = new ArrayList<>();
-        Set<Long> uniqueValues = new HashSet<>();
+        //Set<Long> uniqueValues = new HashSet<>();
+        Map<Long, Long> blogIdToLikeCount = new HashMap<>();
         for (Blog blog : blogList) {
-            Long userId = blog.getUser().getUserId();
-            if (uniqueValues.add(userId)) {
-                userIds.add(userId);
-            }
+            blogIdToLikeCount.put(blog.getBlogId(), likesService.getLikeCountForBlog(blog.getBlogId()));
         }
+        model.addAttribute("blogLikeCounts", blogIdToLikeCount);
+
+
 
         List<User> users =userService.findAllById(userIds);
-
         Map<Long, String> userIdToUsername = users.stream()
                 .collect(Collectors.toMap(User::getUserId, User::getUsername));
 
@@ -96,14 +100,28 @@ public class WordPressBlogController {
 
         model.addAttribute("blogList", blogList);
         model.addAttribute("usernames",userIdToUsername);
+        String token = extractJwtFromCookies(request);
+        if (token != null) {
+            Long userId = jwtService.extractUserId(token);
+            model.addAttribute("currentUserId", userId);
+
+            Set<Long> likedBlogs = likesService.getBlogIdsLikedByUser(userId);
+            model.addAttribute("likedBlogs", likedBlogs);
+        } else {
+            model.addAttribute("currentUserId", null);
+            model.addAttribute("likedBlogs", Set.of());
+        }
         return "show-all-blogs";
 
 
     }
 
-    @GetMapping("/show-blog/{userId}")
-    public String showUserBlog(@PathVariable long userId, Model model)
+    @GetMapping("/show-blog")
+    public String showUserBlog( Model model,HttpServletRequest request)
     {
+        String jwtToken = extractJwtFromCookies(request);
+        if (jwtToken == null) {return "redirect:/login";}
+        Long userId=jwtService.extractUserId(jwtToken);
         User user=userService.findById(userId);
         if (user == null) {
             return "user-not-found";  // You can create a page to show user not found

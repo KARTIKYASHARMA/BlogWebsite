@@ -8,6 +8,10 @@ import net.sample.wordpress.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 
 @Service
 public class LikesService {
@@ -31,7 +35,8 @@ public class LikesService {
         boolean alreadyLiked = likesRepository.existsByUser_UserIdAndBlog_BlogId(userId, blogId);
         if (alreadyLiked) {
             Likes existingLike=likesRepository.findByUser_UserIdAndBlog_BlogId(userId,blogId);
-            likesRepository.delete(existingLike);
+            existingLike.setLikes(0);
+            likesRepository.save(existingLike);
             return  "User with ID " + userId + " unliked blog " + blogId + "!";
         }
 
@@ -50,6 +55,12 @@ public class LikesService {
 
     public long getLikeCountForBlog(Long blogId) {
         return likesRepository.countByBlog_BlogId(blogId);
+    }
+    public Set<Long> getBlogIdsLikedByUser(Long userId) {
+        List<Likes> likes = likesRepository.findByUser_UserIdAndLikes(userId, 1);
+        return likes.stream()
+                .map(like -> like.getBlog().getBlogId())
+                .collect(Collectors.toSet());
     }
 
     public String getUsernameWhoLiked(Likes likes) {

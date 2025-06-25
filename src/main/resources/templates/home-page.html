@@ -81,10 +81,19 @@
 
     <div class="action">
         <label>view user blogs</label>
-        <a th:href="@{user/home-page/show-blog/{userId}}">
+        <a th:href="@{/user/home-page/show-blog}">
             <button>View User Blogs</button>
         </a>
     </div>
+
+    <div class="action">
+        <label>logout</label>
+        <a th:href="@{/user/home-page/logout}">
+            <button>Logout</button>
+        </a>
+
+    </div>
+
 
 
     <div class="footer">

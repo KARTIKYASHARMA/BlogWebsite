@@ -1,5 +1,7 @@
 package net.sample.wordpress.controller;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import net.sample.wordpress.entity.Blog;
 import net.sample.wordpress.entity.User;
 import net.sample.wordpress.service.BlogService;
@@ -47,4 +49,20 @@ public class UserController {
         return "user-saved";
 
     }
+
+    @GetMapping("/logout")
+    public String logout(HttpServletResponse response) {
+        // Delete the JWT cookie
+        System.out.println("cookie deleted");
+        Cookie cookie = new Cookie("jwt", null); // Same name as your token
+        cookie.setHttpOnly(true);
+        cookie.setSecure(false); // only if you're using HTTPS
+        cookie.setPath("/"); // match the path of the original cookie
+        cookie.setMaxAge(0); // delete the cookie
+        response.addCookie(cookie);
+        System.out.println("cookie deleted");
+        // Redirect to login
+        return "redirect:/login";
+    }
+
 }

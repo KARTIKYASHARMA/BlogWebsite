@@ -3,6 +3,7 @@ package net.sample.wordpress.repository;
 import net.sample.wordpress.entity.Likes;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface LikesRepository extends JpaRepository<Likes, Long> {
@@ -15,4 +16,8 @@ public interface LikesRepository extends JpaRepository<Likes, Long> {
     Likes findByUser_UserIdAndBlog_BlogId(Long userId, Long blogId);
 
     long countByBlog_BlogId(Long blogId);
+
+
+
+    List<Likes> findByUser_UserIdAndLikes(Long userId, int i);
 }

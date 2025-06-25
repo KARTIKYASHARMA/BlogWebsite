@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import net.sample.wordpress.entity.Blog;
 import net.sample.wordpress.entity.Likes;
 import net.sample.wordpress.entity.User;
+import net.sample.wordpress.service.BlogService;
 import net.sample.wordpress.service.JwtService;
 import net.sample.wordpress.service.LikesService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.Set;
+
 @Controller
 public class LikesController {
 
@@ -23,6 +26,8 @@ public class LikesController {
 
     @Autowired
     private JwtService jwtService;
+    @Autowired
+    private BlogService blogService;
 
 
     @PostMapping("/like")
@@ -35,9 +40,12 @@ public class LikesController {
             return "redirect:/login";
         }
         Long userId=jwtService.extractUserId(token);
+        Blog blog =blogService.findById(blogId);
+        ;
 
         String message=likesService.likeBlog(userId,blogId);
         long likeCount=likesService.getLikeCountForBlog(blogId);
+        blog.setLikeCount((int) likeCount);
         redirectAttributes.addFlashAttribute("message",message);
         redirectAttributes.addFlashAttribute("likeCount",likeCount);
         String referer = request.getHeader("Referer");
