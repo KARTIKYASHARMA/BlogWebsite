@@ -87,7 +87,7 @@
     </style>
 </head>
 <body>
-<form th:action="@{'/user/home-page/blog/save/' + ${userId}}" th:object="${blog}" method="post">
+<form th:action="@{'/user/home-page/blog/save/' + ${userId}}" th:object="${blog}" method="post" enctype="multipart/form-data">
     <h1>Add New Blog Entry</h1>
 
     <label for="title">Title:</label>
@@ -96,7 +96,23 @@
     <label for="content">Content:</label>
     <textarea th:field="*{content}" id="content" required></textarea>
 
+    <label for="imageFile">Blog Image:</label>
+    <input type="file" id="imageFile" name="imageFile" accept="image/*" />
+    <img id="imagePreview" style="display:none; max-width:100%; margin-top:10px;" />
+
     <button type="submit">Submit Blog</button>
+    <script>
+        document.getElementById('imageFile').addEventListener('change', function(event) {
+            const [file] = event.target.files;
+            const preview = document.getElementById('imagePreview');
+            if (file) {
+                preview.src = URL.createObjectURL(file);
+                preview.style.display = 'block';
+            } else {
+                preview.style.display = 'none';
+            }
+        });
+    </script>
 </form>
 
 </body>

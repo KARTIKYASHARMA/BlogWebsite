@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import net.sample.wordpress.entity.User;
 import net.sample.wordpress.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,7 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 public class UserService {
 
-
+    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
     @Autowired
     private UserRepository userRepository;
 
@@ -36,45 +38,52 @@ public class UserService {
 
     public User saveUser(User user) {
         user.setPassword(encoder.encode(user.getPassword()));
-       return userRepository.save(user);
+        User savedUser = userRepository.save(user);
+        logger.info("New user registered: {}", savedUser.getUsername());
+       return savedUser;
 
     }
 
     public User findById(Long id) {
-
+        logger.debug("Finding user by ID: {}", id);
         return userRepository.findById(id).orElse(null);
     }
 
     public String verifyAndGenerateToken(User user) {
+        logger.debug("Authenticating user: {}", user.getUsername());
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword())
             );
             User userFromDb = userRepository.findByUsername(user.getUsername());
-            System.out.println("Raw: " + user.getPassword());
-            System.out.println("Hashed: " + userFromDb.getPassword());
-            System.out.println("Matches: " + encoder.matches(user.getPassword(), userFromDb.getPassword()));
-
             boolean matches = encoder.matches(user.getPassword(), userFromDb.getPassword());
-            System.out.println("Password matches: " + matches);
+            logger.debug("Password match for {}: {}", user.getUsername(), matches);
+//            System.out.println("Raw: " + user.getPassword());
+//            System.out.println("Hashed: " + userFromDb.getPassword());
+//            System.out.println("Matches: " + encoder.matches(user.getPassword(), userFromDb.getPassword()));
+
+
 
             if (authentication.isAuthenticated()) {
-                System.out.println("token:"+jwtService.generateToken(userFromDb.getUsername(),userFromDb.getUserId()));
+                //System.out.println("token:"+jwtService.generateToken(userFromDb.getUsername(),userFromDb.getUserId()));
+                logger.info("JWT issued for user: {}", userFromDb.getUsername());
                 return jwtService.generateToken(userFromDb.getUsername(),userFromDb.getUserId());
+            } else {
+                logger.warn("Authentication failed for user: {}", user.getUsername());
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Authentication exception for user {}: {}", user.getUsername(), e.getMessage());
         }
         return null;
     }
 
     public List<User> findAllById(List<Long> userIds) {
-
+        logger.debug("Fetching users with IDs: {}", userIds);
         return userRepository.findAllById(userIds);
     }
 
     public User findByUsername(String username) {
-
+        logger.debug("Finding user by username: {}", username);
         return userRepository.findByUsername(username);
     }
 }

@@ -6,6 +6,8 @@ import net.sample.wordpress.entity.Blog;
 import net.sample.wordpress.entity.User;
 import net.sample.wordpress.service.BlogService;
 import net.sample.wordpress.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,7 +21,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/user/home-page")
 public class UserController {
-
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     @Autowired
     private UserService userService;
 
@@ -30,13 +32,16 @@ public class UserController {
 
     @GetMapping("/")
     public String homePage(Model model) {
+        logger.debug("GET /user/home-page/ - Loading homepage");
         List<Blog> blogs = blogService.getAllBlogs();
+        logger.info("Loaded {} blogs for homepage", blogs.size());
         model.addAttribute("blogs", blogs);
         return "home-page";
     }
 
     @GetMapping("/register-user")
     public String registerUser(Model model) {
+        logger.debug("GET /register-user - Displaying user registration form");
         User user =new User();
         model.addAttribute("user", user);
         return "register-user";
@@ -44,14 +49,17 @@ public class UserController {
     @PostMapping("/user-saved")
     public String addUserToDatabase(Model model, @ModelAttribute User user)
     {
-        model.addAttribute("user", user);
+        logger.info("Saving new user: {}", user.getUsername());
         userService.saveUser(user);
+        model.addAttribute("user", user);
+        logger.info("User {} saved successfully", user.getUsername());
         return "user-saved";
 
     }
 
     @GetMapping("/logout")
     public String logout(HttpServletResponse response) {
+        logger.info("Logging user out. Deleting JWT cookie.");
         // Delete the JWT cookie
         System.out.println("cookie deleted");
         Cookie cookie = new Cookie("jwt", null); // Same name as your token
@@ -62,6 +70,7 @@ public class UserController {
         response.addCookie(cookie);
         System.out.println("cookie deleted");
         // Redirect to login
+        logger.debug("JWT cookie deleted. Redirecting to login.");
         return "redirect:/login";
     }
 

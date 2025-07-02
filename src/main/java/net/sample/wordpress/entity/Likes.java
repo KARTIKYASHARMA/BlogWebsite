@@ -10,7 +10,7 @@ public class Likes {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long LikesId;
-    private int likes;
+   // private int likes;
 
     @ManyToOne
     @JoinColumn(name="blog_id",referencedColumnName ="blogId")

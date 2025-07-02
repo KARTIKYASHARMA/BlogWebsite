@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <title>Design For Life | Blog</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/di
-  st/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Include Bootstrap CSS in your <head> -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
@@ -41,9 +42,8 @@
       background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
       opacity: 0.3;
     }
-
     .navbar {
-      background: rgba(255, 255, 255, 0.95);
+      background: white;
       backdrop-filter: blur(10px);
       border-bottom: 1px solid rgba(0, 0, 0, 0.1);
       position: sticky;
@@ -98,7 +98,6 @@
       position: relative;
       z-index: 2;
     }
-
     /* Hero Section */
     .hero-section {
       background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), 
@@ -120,6 +119,7 @@
 
     /* Blog Section */
     .blog-section {
+      margin-top: 60px;
       padding: 80px 0;
       background: #fff;
     }
@@ -146,6 +146,21 @@
     }
 
     /* Updated Blog Card Styles */
+    /*.blog-card {*/
+    /*  background: #fff;*/
+    /*  border-radius: 15px;*/
+    /*  overflow: hidden;*/
+    /*  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);*/
+    /*  transition: all 0.3s ease;*/
+    /*  border: 1px solid rgba(0, 0, 0, 0.05);*/
+    /*  margin-bottom: 40px;*/
+    /*  position: relative;*/
+    /*  display: flex;*/
+    /*  min-height: 320px; !* Increased from 280px *!*/
+    /*  height: auto; !* Allow it to grow as needed *!*/
+
+    /*}*/
+
     .blog-card {
       background: #fff;
       border-radius: 15px;
@@ -156,8 +171,10 @@
       margin-bottom: 40px;
       position: relative;
       display: flex;
-      height: 280px;
+      height: auto;
+      min-height: 320px;
     }
+
 
     .blog-card:hover {
       transform: translateY(-5px);
@@ -187,10 +204,12 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      gap: 10px; /* Add spacing between blocks */
     }
 
     .blog-main-content {
-      flex: 1;
+      flex-grow: 1;
+      overflow: visible;
     }
 
     .blog-title {
@@ -219,6 +238,8 @@
       font-size: 0.85rem;
       color: #999;
       margin-top: 20px;
+      flex-wrap: wrap;
+      row-gap: 10px
     }
 
 
@@ -369,26 +390,32 @@
 </head>
 <body>
 
-<!-- Navbar -->
 <nav class="navbar navbar-expand-lg">
   <div class="container">
-    <a class="navbar-brand" href="#" style="color: #333; font-weight: 600;">
-      <i class="fas fa-home" style="margin-right: 8px;"></i>
+    <a class="navbar-brand d-flex align-items-center logo text-dark" href="/">
+      <i class="fas fa-home me-2"></i>MySite
     </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav me-auto">
-        <li class="nav-item"><a class="nav-link" href="#">HOME</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">BLOG</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">PODCAST</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">ABOUT</a></li>
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item"><a class="nav-link" th:href="@{/user/home-page/}">HOME</a></li>
+        <li class="nav-item"><a class="nav-link" th:href="@{/user/home-page/show-blogs}">VIEW USER BLOGS</a></li>
+       <li class="nav-item"><a class="nav-link" th:href="@{/user/home-page/add-blog/}">ADD A NEW BLOG</a></li>
+        <li class="nav-item"><a class="nav-link" href="/about">ABOUT</a></li>
       </ul>
       <div class="d-flex gap-3">
-        <i class="fab fa-instagram" style="color: #333; cursor: pointer;"></i>
-        <i class="fab fa-pinterest" style="color: #333; cursor: pointer;"></i>
-        <i class="fas fa-search" style="color: #333; cursor: pointer;"></i>
+        <a href="#" class="text-dark"><i class="fab fa-instagram"></i></a>
+        <a href="#" class="text-dark"><i class="fab fa-pinterest"></i></a>
+        <a href="#" class="text-dark"><i class="fas fa-search"></i></a>
+        <!-- Logout Button (icon only) -->
+        <a th:href="@{/user/home-page/logout}" class="btn btn-outline-danger">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
       </div>
     </div>
   </div>
@@ -400,145 +427,113 @@
     <div class="row justify-content-center">
       <div class="col-lg-8">
         <div class="hero-content text-center">
-          <div class="logo">DESIGN FOR LIFE</div>
+          <div class="logo">BLOGS</div>
           <div class="tagline">Creating Beautiful Spaces & Meaningful Experiences</div>
         </div>
       </div>
     </div>
   </div>
 </div>
-
 <!-- Blog Section -->
 <div class="blog-section">
   <div class="container">
     <h2 class="section-title">Latest Stories</h2>
-    <div th:if="${message}" class="alert alert-info text-center">
-      <p th:text="${message}"></p>
-    </div>
 
+<!--    &lt;!&ndash; Info message &ndash;&gt;-->
+<!--    <div th:if="${message}" class="alert alert-info text-center">-->
+<!--      <p th:text="${message}"></p>-->
+<!--    </div>-->
 
-    <div th:if="${#lists.isEmpty(blogList)}" class="no-blogs">
-      <!-- Show Existing Comments -->
-      <div class="ps-3 pt-2">
-        <h6>Comments:</h6>
-        <div th:if="${blog.comments != null and !#lists.isEmpty(blog.comments)}">
-          <ul class="list-unstyled">
-            <li th:each="comment : ${blog.comments}">
-              <strong th:text="${comment.user.username}">Username</strong>:
-              <span th:text="${comment.comment}">Sample comment</span>
-            </li>
-          </ul>
-        </div>
-        <div th:if="${blog.comments == null or #lists.isEmpty(blog.comments)}" class="text-muted">
-          No comments yet.
-        </div>
-      </div>
-      <!-- Add Comment Form -->
-      <form th:action="@{/post}" method="post" class="ps-3 pt-2">
-        <input type="hidden" name="blogId" th:value="${blog.blogId}" />
-        <div class="mb-2">
-          <textarea name="commentText" class="form-control" rows="2" placeholder="Write a comment..." required></textarea>
-        </div>
-        <button type="submit" class="btn btn-sm btn-outline-primary">Post Comment</button>
-      </form>
-
-
+    <!-- No blogs -->
+    <div th:if="${#lists.isEmpty(blogList)}" class="no-blogs text-center">
       <i class="fas fa-pen-fancy" style="font-size: 3rem; margin-bottom: 20px; color: #ddd;"></i>
       <p>No blog entries found. Check back soon for inspiring content!</p>
     </div>
 
+    <!-- Blog Cards -->
     <div class="row" th:each="blog : ${blogList}">
       <div class="col-12">
         <article class="blog-card">
           <div class="blog-image-container">
-            <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+            <img th:src="${blog.imagePath != null ? blog.imagePath : '/default-blog.png'}"
                  class="blog-image" alt="Blog Image">
           </div>
-          
+
           <div class="blog-content">
             <div class="blog-main-content">
-              <h3 class="blog-title" th:text="${blog.title}">PLAYING WITH PATTERNS</h3>
+              <h3 class="blog-title" th:text="${blog.title}">Blog Title</h3>
               <p class="blog-excerpt" th:text="${#strings.abbreviate(blog.content, 120)}">
-                Create a blog post subtitle that summarizes your post in a few short, punchy sentences and entices your audience to continue reading....
+                Blog content preview...
               </p>
+              <a th:href="@{'/user/home-page/show-full-blog/' + ${blog.blogId}}" class="btn btn-sm btn-outline-primary mt-2">
+                Read More
+              </a>
+
             </div>
-            
+
             <div class="blog-meta">
               <div class="blog-author-info">
                 <div class="author-avatar">
-                  <!-- Static value, can be replaced with th:text="${blog.author.initials}" or th:text="${#strings.substring(blog.author.name, 0, 1)}" -->
                   A
                 </div>
                 <div class="author-details">
                   <div class="author-name" th:text="${usernames[blog.user.userId]}">Author Name</div>
-
-
-                  <div class="blog-date">
-                    <!-- Static value, can be replaced with th:text="${#dates.format(blog.createdDate, 'MMM dd, yyyy')}" -->
-                    Mar 21, 2023
+                  <div class="blog-date" th:text="${#dates.format(blog.createdDate, 'MMM dd, yyyy')}">
+                    Date
                   </div>
                 </div>
               </div>
-              
-<!--              <div class="blog-stats">-->
-<!--                <div class="stat-item">-->
-<!--                  <i class="far fa-eye"></i>-->
-<!--                  &lt;!&ndash; Static value, can be replaced with th:text="${blog.viewCount}" &ndash;&gt;-->
-<!--                  <span>0 views</span>-->
-<!--                </div>-->
-                <div class="stat-item">
-                  <i class="far fa-comment"></i>
-                  <!-- Static value, can be replaced with th:text="${blog.commentCount}" -->
-                  <span th:text="${#lists.size(blog.comments)} + ' comments'">0 comments</span>
 
-                </div>
-                <div class="ps-3 pt-2">
-                  <h6>Comments:</h6>
-                  <div th:if="${blog.comments != null and !#lists.isEmpty(blog.comments)}">
-                    <ul class="list-unstyled">
-                      <li th:each="comment : ${blog.comments}">
-                        <strong th:text="${comment.user.username}">Username</strong>:
-                        <span th:text="${comment.comment}">Sample comment</span>
-                      </li>
-                    </ul>
-                  </div>
-                  <div th:if="${blog.comments == null or #lists.isEmpty(blog.comments)}" class="text-muted">
-                    No comments yet.
-                  </div>
-                </div>
-
-                <!-- 📝 Dynamic Add Comment Form -->
-                <form th:action="@{/post}" method="post" class="ps-3 pt-2">
-                  <input type="hidden" name="blogId" th:value="${blog.blogId}" />
-                  <div class="mb-2">
-                    <textarea name="commentText" class="form-control" rows="2" placeholder="Write a comment..." required></textarea>
-                  </div>
-                  <button type="submit" class="btn btn-sm btn-outline-primary">Post Comment</button>
-                </form>
+              <!-- Stats -->
+              <div class="stat-item">
+                <i class="far fa-comment"></i>
+                <span th:text="${#lists.size(blog.comments)} + ' comments'">0 comments</span>
               </div>
-            </div>
-                <form th:action="@{/like}" method="post">
-                  <input type="hidden" name="userId" th:value="${currentUserId}" />
-                  <input type="hidden" name="blogId" th:value="${blog.blogId}" />
-                  <button type="submit" class="like-btn">
-                    <i class="fa-heart"
-                       th:classappend="${likedBlogs != null and likedBlogs.contains(blog.blogId)} ? 'fas text-danger' : 'far'">
-                    </i>
 
-
-                    <span th:text="${blogLikeCounts[blog.blogId]}">0</span>
-
-                  </button>
-                </form>
-
+              <!-- Comments -->
+              <div class="ps-3 pt-2">
+                <h6>Comments:</h6>
+                <div th:if="${blog.comments != null and !#lists.isEmpty(blog.comments)}">
+                  <ul class="list-unstyled">
+                    <li th:each="comment : ${blog.comments}">
+                      <strong th:text="${comment.user.username}">Username</strong>:
+                      <span th:text="${comment.comment}">Sample comment</span>
+                    </li>
+                  </ul>
+                </div>
+                <div th:if="${blog.comments == null or #lists.isEmpty(blog.comments)}" class="text-muted">
+                  No comments yet.
+                </div>
               </div>
-            </div>
-          </div>
+
+              <!-- Add Comment Form -->
+              <form th:action="@{/post}" method="post" class="ps-3 pt-2">
+                <input type="hidden" name="blogId" th:value="${blog.blogId}" />
+                <div class="mb-2">
+                  <textarea name="commentText" class="form-control" rows="2" placeholder="Write a comment..." required></textarea>
+                </div>
+                <button type="submit" class="btn btn-sm btn-outline-primary">Post Comment</button>
+              </form>
+
+              <!-- Like Form -->
+              <form th:action="@{/like}" method="post">
+                <input type="hidden" name="userId" th:value="${currentUserId}" />
+                <input type="hidden" name="blogId" th:value="${blog.blogId}" />
+                <button type="submit" class="like-btn" style="background: none; border: none;">
+                  <i class="fa-heart"
+                     th:classappend="${likedBlogs != null and likedBlogs.contains(blog.blogId)} ? 'fas text-danger' : 'far'">
+                  </i>
+                  <span th:text="${blogLikeCounts[blog.blogId] ?: 0}">0</span>
+                </button>
+              </form>
+
+            </div> <!-- blog-meta -->
+          </div> <!-- blog-content -->
         </article>
       </div>
-    </div>
-  </div>
-</div>
+    </div> <!-- row -->
+  </div> <!-- container -->
+</div> <!-- blog-section -->
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

@@ -14,7 +14,7 @@ import java.util.List;
 public class Blog {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     long blogId;
     @Column(nullable = false)
     private String title;
@@ -25,6 +25,13 @@ public class Blog {
 
     @OneToMany(mappedBy = "blog", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Comments> comments;
+
+    // Path to the uploaded image file
+    private String imagePath;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(nullable = false, updatable = false)
+    private java.util.Date createdDate;
 
 
 
