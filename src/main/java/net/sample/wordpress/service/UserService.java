@@ -1,5 +1,6 @@
 package net.sample.wordpress.service;
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import net.sample.wordpress.entity.User;
@@ -20,6 +21,7 @@ import java.util.List;
 public class UserService {
 
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+
     @Autowired
     private UserRepository userRepository;
 
@@ -86,4 +88,14 @@ public class UserService {
         logger.debug("Finding user by username: {}", username);
         return userRepository.findByUsername(username);
     }
+    @Transactional
+    public void deleteUser(Long userId) {
+        if (userRepository.existsById(userId)) {
+            userRepository.deleteById(userId);
+            logger.info("Deleted user with ID: {}", userId);
+        } else {
+            logger.warn("Attempted to delete non-existent user ID: {}", userId);
+        }
+    }
+
 }

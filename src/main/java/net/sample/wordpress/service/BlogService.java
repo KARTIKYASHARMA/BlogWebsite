@@ -1,5 +1,6 @@
 package net.sample.wordpress.service;
 
+import jakarta.transaction.Transactional;
 import net.sample.wordpress.entity.Blog;
 import net.sample.wordpress.entity.User;
 import net.sample.wordpress.repository.BlogRepository;
@@ -37,6 +38,7 @@ public class BlogService {
         }
     }
 
+    @Transactional
     public void deleteBlogById(long blogId) {
         if (blogRepository.existsById(blogId)) {
             blogRepository.deleteById(blogId);

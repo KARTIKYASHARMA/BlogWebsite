@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.ToString;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -23,8 +24,13 @@ public class Blog {
 
     private int likeCount;
 
-    @OneToMany(mappedBy = "blog", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Comments> comments;
+
+    @OneToMany(mappedBy = "blog", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Comments> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "blog", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Likes> likes = new ArrayList<>();
+
 
     // Path to the uploaded image file
     private String imagePath;
@@ -40,6 +46,16 @@ public class Blog {
     @JoinColumn(name = "user_id",referencedColumnName = "userId")
     @ToString.Exclude
     private User user;
+
+    public void addLike(Likes like) {
+        likes.add(like);
+        like.setBlog(this);
+    }
+
+    public void addComment(Comments comment) {
+        comments.add(comment);
+        comment.setBlog(this);
+    }
 
 
 

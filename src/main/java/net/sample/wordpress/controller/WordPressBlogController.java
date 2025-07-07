@@ -159,34 +159,104 @@ public class WordPressBlogController {
 
 
     }
-
     @GetMapping("/show-blog")
-    public String showUserBlog( Model model,HttpServletRequest request)
-    {
+    public String showUserBlog(Model model, HttpServletRequest request) {
         String jwtToken = extractJwtFromCookies(request);
         if (jwtToken == null) {
             logger.warn("JWT token missing in show-blog request. Redirecting to login.");
-            return "redirect:/login";}
-        Long userId=jwtService.extractUserId(jwtToken);
-        User user=userService.findById(userId);
-        if (user == null) {
-            logger.error("User not found with ID: {}", userId);
-            return "user-not-found";  // You can create a page to show user not found
+            return "redirect:/login";
         }
 
-        List<Blog> blogList =user.getBlogs();
+        Long userId = jwtService.extractUserId(jwtToken);
+        User user = userService.findById(userId);
+        if (user == null) {
+            logger.error("User not found with ID: {}", userId);
+            return "user-not-found";
+        }
 
+        List<Blog> blogList = user.getBlogs();
         logger.info("User {} has {} blogs", user.getUsername(), blogList.size());
-        model.addAttribute("blogList", blogList);
 
-        return "show-blog";
+        // Prepare blogLikeCounts
+        Map<Long, Long> blogIdToLikeCount = new HashMap<>();
+        for (Blog blog : blogList) {
+            blogIdToLikeCount.put(blog.getBlogId(), likesService.getLikeCountForBlog(blog.getBlogId()));
+        }
+
+        // Usernames map (only one entry)
+        Map<Long, String> usernames = Map.of(userId, user.getUsername());
+
+        // Blogs liked by user
+        Set<Long> likedBlogs = likesService.getBlogIdsLikedByUser(userId);
+
+        model.addAttribute("blogList", blogList);
+        model.addAttribute("blogLikeCounts", blogIdToLikeCount);
+        model.addAttribute("usernames", usernames);
+        model.addAttribute("currentUserId", userId);
+        model.addAttribute("likedBlogs", likedBlogs);
+
+        return "show-blog"; // Reuse the same template structure as 'show-all-blogs'
     }
+
     @GetMapping("/show-full-blog/{id}")
-    public String viewBlog(@PathVariable Long id, Model model) {
-        Blog blog = blogService.findById(id); // or however you retrieve
+    public String viewBlog(@PathVariable Long id, Model model, HttpServletRequest request) {
+        Blog blog = blogService.findById(id);
+        if (blog == null) {
+            return "user-not-found"; // or your custom "blog not found" page
+        }
+
+        // Add the blog itself
         model.addAttribute("blog", blog);
-        return "show-full-blog"; // your detail view template
+
+        // Extract JWT
+        String jwtToken = extractJwtFromCookies(request);
+        if (jwtToken != null) {
+            Long userId = jwtService.extractUserId(jwtToken);
+            model.addAttribute("currentUserId", userId);
+
+            // Get liked blogs by user
+            Set<Long> likedBlogs = likesService.getBlogIdsLikedByUser(userId);
+            model.addAttribute("likedBlogs", likedBlogs);
+        } else {
+            model.addAttribute("currentUserId", null);
+            model.addAttribute("likedBlogs", Set.of());
+        }
+
+        // Add blog like count
+        long likeCount = likesService.getLikeCountForBlog(blog.getBlogId());
+        model.addAttribute("blogLikeCount", likeCount);
+
+        return "show-full-blog"; // View template
     }
+    @GetMapping("/delete-blog/{id}")
+    public String deleteBlog(@PathVariable Long id, HttpServletRequest request) {
+        String token = extractJwtFromCookies(request);
+        if (token == null) {
+            logger.warn("Attempt to delete blog without JWT. Redirecting to login.");
+            return "redirect:/login";
+        }
+
+        Long currentUserId = jwtService.extractUserId(token);
+        Blog blog = blogService.findById(id);
+
+        if (blog == null) {
+            logger.warn("Attempted to delete non-existent blog with ID: {}", id);
+            return "user-not-found"; // or a proper error page
+        }
+
+        // Authorization: ensure user owns the blog
+        if (blog.getUser() == null || blog.getUser().getUserId() == null || !blog.getUser().getUserId().equals(currentUserId)) {
+            logger.warn("User ID {} attempted to delete blog ID {} not owned by them.", currentUserId, id);
+            return "unauthorized"; // you can create a Thymeleaf template named `unauthorized.html`
+        }
+
+        blogService.deleteBlogById(id);
+        logger.info("User ID {} deleted blog ID {}", currentUserId, id);
+
+        return "redirect:/user/home-page/show-blog"; // Redirect to user's blog list
+    }
+
+
 
     private String extractJwtFromCookies(HttpServletRequest request) {
         if (request.getCookies() != null) {

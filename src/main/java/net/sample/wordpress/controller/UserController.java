@@ -2,6 +2,7 @@ package net.sample.wordpress.controller;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import net.sample.wordpress.entity.Blog;
 import net.sample.wordpress.entity.User;
 import net.sample.wordpress.service.BlogService;
@@ -11,10 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -68,10 +66,28 @@ public class UserController {
         cookie.setPath("/"); // match the path of the original cookie
         cookie.setMaxAge(0); // delete the cookie
         response.addCookie(cookie);
-        System.out.println("cookie deleted");
+
         // Redirect to login
         logger.debug("JWT cookie deleted. Redirecting to login.");
         return "redirect:/login";
     }
+
+    @Transactional
+    @GetMapping("/delete-user-by-id")
+    public String deleteUserById(@RequestParam("id") Long userId, Model model) {
+        logger.info("Request received to delete user with ID: {}", userId);
+        try {
+            userService.deleteUser(userId);
+            logger.info("User with ID {} deleted successfully.", userId);
+            model.addAttribute("message", "User deleted successfully.");
+            return "redirect:/login";
+        } catch (Exception e) {
+            logger.error("Failed to delete user with ID {}: {}", userId, e.getMessage());
+            model.addAttribute("error", "Error deleting user.");
+            return "error-page";
+        }
+    }
+
+
 
 }
