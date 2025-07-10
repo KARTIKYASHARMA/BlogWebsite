@@ -38,7 +38,14 @@ public class SecurityConfig {
 
         return http .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizeRequest-> authorizeRequest
-                        .requestMatchers("/register/**","/login/**","/register","/login").permitAll()
+                        .requestMatchers(
+                                "/register/**", "/register",
+                                "/login/**", "/login",
+                                "/user/home-page/show-all-blogs",
+                                "/user/home-page/show-full-blog/**",
+                                "/uploads/**",     // ✅ for blog images
+                                "/css/**", "/js/**", "/images/**"
+                        ).permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/user/**").hasAnyRole("USER","ADMIN")
                         .anyRequest()

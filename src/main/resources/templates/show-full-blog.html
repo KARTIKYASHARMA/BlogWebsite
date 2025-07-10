@@ -3,58 +3,612 @@
 <head>
     <title>Blog Detail</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            --secondary-gradient: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            --accent-gradient: linear-gradient(135deg, #fecaca 0%, #dc2626 100%);
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --text-light: #9ca3af;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f9fafb;
+            --bg-tertiary: #f3f4f6;
+            --border-color: #e5e7eb;
+            --border-light: #f3f4f6;
+            --shadow-light: 0 1px 3px rgba(0, 0, 0, 0.1);
+            --shadow-medium: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-heavy: 0 10px 15px rgba(0, 0, 0, 0.1);
+            --border-radius: 12px;
+            --border-radius-sm: 8px;
+            --transition: all 0.3s ease;
+            --red-50: #fef2f2;
+            --red-100: #fee2e2;
+            --red-600: #dc2626;
+            --red-700: #b91c1c;
+            --red-800: #991b1b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Clean, minimalist navbar */
+        .navbar {
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-light);
+            transition: var(--transition);
+            padding: 1rem 0;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--red-600);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .navbar-brand:hover {
+            color: var(--red-700);
+        }
+
+        .nav-link {
+            color: var(--text-primary) !important;
+            font-weight: 500;
+            margin: 0 0.5rem;
+            padding: 0.5rem 1rem !important;
+            border-radius: var(--border-radius-sm);
+            transition: var(--transition);
+            text-decoration: none;
+        }
+
+        .nav-link:hover {
+            background: var(--red-50);
+            color: var(--red-600) !important;
+        }
+
+        /* Clean social links */
+        .social-link {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            transition: var(--transition);
+            padding: 0.5rem;
+            border-radius: var(--border-radius-sm);
+        }
+
+        .social-link:hover {
+            color: var(--red-600);
+            background: var(--red-50);
+        }
+
+        /* Clean main content */
+        .main-content {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        /* Clean back button */
+        .back-btn {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--border-radius-sm);
+            color: var(--text-primary);
+            font-weight: 500;
+            text-decoration: none;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .back-btn:hover {
+            background: var(--red-50);
+            color: var(--red-600);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        /* Clean blog detail card */
+        .blog-detail-card {
+            background: var(--bg-primary);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-light);
+            border: 1px solid var(--border-color);
+        }
+
+        .blog-detail-content {
+            padding: 3rem;
+        }
+
+        .blog-title {
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+
+        .blog-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .blog-meta i {
+            color: var(--red-600);
+        }
+
+        .blog-meta-text {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .blog-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: var(--border-radius-sm);
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-light);
+        }
+
+        .blog-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-primary);
+            margin-bottom: 3rem;
+        }
+
+        /* Clean like section */
+        .like-section {
+            background: var(--bg-tertiary);
+            border-radius: var(--border-radius-sm);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .like-btn {
+            background: none;
+            border: none;
+            color: var(--red-600);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+            padding: 0.75rem;
+            border-radius: var(--border-radius-sm);
+            font-weight: 500;
+        }
+
+        .like-btn:hover {
+            background: var(--red-50);
+        }
+
+        .like-btn.liked {
+            color: var(--red-600);
+        }
+
+        .login-prompt {
+            background: var(--red-50);
+            color: var(--red-800);
+            padding: 1.5rem;
+            border-radius: var(--border-radius-sm);
+            text-align: center;
+            border: 1px solid var(--red-100);
+        }
+
+        .login-prompt-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--red-600);
+        }
+
+        /* Clean comments section */
+        .comments-section {
+            border-top: 1px solid var(--border-color);
+            padding-top: 2rem;
+        }
+
+        .comments-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .comments-title i {
+            color: var(--red-600);
+        }
+
+        .comment-item {
+            background: var(--bg-tertiary);
+            border-radius: var(--border-radius-sm);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+        }
+
+        .comment-item:hover {
+            background: var(--bg-primary);
+            box-shadow: var(--shadow-light);
+        }
+
+        .comment-author {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .comment-text {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .no-comments {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: var(--bg-tertiary);
+            border-radius: var(--border-radius-sm);
+            border: 1px solid var(--border-color);
+        }
+
+        .no-comments-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--red-600);
+        }
+
+        .no-comments-text {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        /* Clean comment form */
+        .comment-form {
+            background: var(--bg-tertiary);
+            border-radius: var(--border-radius-sm);
+            padding: 2rem;
+            margin-top: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .comment-form-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .comment-form-title i {
+            color: var(--red-600);
+        }
+
+        .form-control {
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-sm);
+            padding: 1rem;
+            font-size: 1rem;
+            transition: var(--transition);
+            background: var(--bg-primary);
+        }
+
+        .form-control:focus {
+            border-color: var(--red-600);
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+            outline: none;
+        }
+
+        .btn-primary {
+            background: var(--red-600);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--border-radius-sm);
+            color: white;
+            font-weight: 500;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary:hover {
+            background: var(--red-700);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        /* Clean button styles */
+        .btn-outline-primary {
+            border-color: var(--red-600);
+            color: var(--red-600);
+            transition: var(--transition);
+            border-radius: var(--border-radius-sm);
+        }
+
+        .btn-outline-primary:hover {
+            background: var(--red-600);
+            border-color: var(--red-600);
+            color: white;
+        }
+
+        .btn-outline-danger {
+            border-color: var(--red-600);
+            color: var(--red-600);
+            transition: var(--transition);
+            border-radius: var(--border-radius-sm);
+        }
+
+        .btn-outline-danger:hover {
+            background: var(--red-600);
+            border-color: var(--red-600);
+            color: white;
+        }
+
+        .btn-outline-warning {
+            border-color: #d97706;
+            color: #d97706;
+            transition: var(--transition);
+            border-radius: var(--border-radius-sm);
+        }
+
+        .btn-outline-warning:hover {
+            background: #d97706;
+            border-color: #d97706;
+            color: white;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .blog-detail-content {
+                padding: 2rem;
+            }
+
+            .blog-title {
+                font-size: 2rem;
+            }
+
+            .blog-image {
+                height: 250px;
+            }
+
+            .main-content {
+                margin: 1rem auto;
+            }
+
+            .comment-form {
+                padding: 1.5rem;
+            }
+
+            .blog-meta {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .blog-detail-content {
+                padding: 1.5rem;
+            }
+
+            .blog-title {
+                font-size: 1.75rem;
+            }
+
+            .comment-form {
+                padding: 1.25rem;
+            }
+
+            .navbar-brand {
+                font-size: 1.25rem;
+            }
+        }
+
+        /* Loading animation */
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(220, 38, 38, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--red-600);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
 </head>
 <body>
 
-<div class="container mt-4">
-    <!-- Back Button -->
-    <div class="mb-3">
-        <button class="btn btn-secondary" onclick="window.history.back()">
-            <i class="fas fa-arrow-left"></i> Back
+<nav class="navbar navbar-expand-lg" id="mainNavbar">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="/">
+            <i class="fas fa-home me-2"></i>MySite
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
         </button>
-    </div>
 
-    <div class="blog-detail">
-        <h1 th:text="${blog.title}">Blog Title</h1>
-        <p class="text-muted" th:text="${#dates.format(blog.createdDate, 'MMM dd, yyyy')}">Date</p>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link" th:href="@{/user/home-page/show-all-blogs}">HOME</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/user/home-page/show-blog}">VIEW USER BLOGS</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/user/home-page/add-blog/}">ADD A NEW BLOG</a></li>
+                <li class="nav-item"><a class="nav-link" href="/about">ABOUT</a></li>
+            </ul>
+            <div class="d-flex gap-3 align-items-center">
+                <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-pinterest"></i></a>
+                <a href="#" class="social-link"><i class="fas fa-search"></i></a>
 
-        <img th:src="${blog.imagePath != null ? blog.imagePath : '/default-blog.png'}"
-             class="img-fluid mb-4" alt="Blog Image"/>
-
-        <div th:text="${blog.content}">Full blog content here...</div>
-
-        <!-- Like Form -->
-        <form th:action="@{/like}" method="post" class="mb-3">
-            <input type="hidden" name="userId" th:value="${currentUserId}" />
-            <input type="hidden" name="blogId" th:value="${blog.blogId}" />
-            <button type="submit" class="btn btn-link p-0" style="text-decoration: none;">
-                <i class="fa-heart"
-                   th:classappend="${likedBlogs != null and likedBlogs.contains(blog.blogId)} ? 'fas text-danger' : 'far'">
-                </i>
-                <span th:text="${blogLikeCount}">0</span>
-            </button>
-        </form>
-
-        <hr>
-        <h4>Comments</h4>
-        <ul class="list-group mb-3">
-            <li class="list-group-item" th:each="comment : ${blog.comments}">
-                <strong th:text="${comment.user.username}">Username</strong>:
-                <span th:text="${comment.comment}">Comment</span>
-            </li>
-        </ul>
-
-        <!-- Comment Form -->
-        <form th:action="@{/post}" method="post">
-            <input type="hidden" name="blogId" th:value="${blog.blogId}" />
-            <div class="mb-3">
-                <textarea name="commentText" class="form-control" rows="3" placeholder="Add your comment" required></textarea>
+                <!-- Conditional Login/Logout -->
+                <div th:if="${currentUserId != null}">
+                    <a th:href="@{/user/home-page/logout}" class="btn btn-outline-danger">
+                        <i class="fas fa-sign-out-alt me-1"></i> Logout
+                    </a>
+                    <form th:action="@{/user/home-page/delete-user-by-id}" method="get" style="display:inline;">
+                        <input type="hidden" name="id" th:value="${currentUserId}" />
+                        <button type="submit" class="btn btn-outline-warning ms-2"
+                                onclick="return confirm('Are you sure you want to delete your account? This action is irreversible.')">
+                            <i class="fas fa-user-slash me-1"></i> Delete Account
+                        </button>
+                    </form>
+                </div>
+                <div th:if="${currentUserId == null}">
+                    <a th:href="@{/login}" class="btn btn-outline-primary">
+                        <i class="fas fa-sign-in-alt me-1"></i> Login
+                    </a>
+                </div>
             </div>
-            <button type="submit" class="btn btn-primary">Submit Comment</button>
-        </form>
+        </div>
+    </div>
+</nav>
+
+<div class="main-content">
+    <!-- Back Button -->
+    <a href="javascript:history.back()" class="back-btn">
+        <i class="fas fa-arrow-left"></i> Back to Blog List
+    </a>
+
+    <div class="blog-detail-card">
+        <div class="blog-detail-content">
+            <h1 class="blog-title" th:text="${blog.title}">Blog Title</h1>
+
+            <div class="blog-meta">
+                <div class="d-flex align-items-center gap-2">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span class="blog-meta-text" th:text="${#dates.format(blog.createdDate, 'MMM dd, yyyy')}">Date</span>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <i class="fas fa-clock"></i>
+                    <span class="blog-meta-text">5 min read</span>
+                </div>
+            </div>
+
+            <img th:src="${blog.imagePath != null ? blog.imagePath : '/default-blog.png'}"
+                 class="blog-image" alt="Blog Image"/>
+
+            <div class="blog-content" th:text="${blog.content}">Full blog content here...</div>
+
+            <!-- Like Section -->
+            <div class="like-section">
+                <div th:if="${currentUserId != null}">
+                    <form th:action="@{/like}" method="post" class="d-inline">
+                        <input type="hidden" name="userId" th:value="${currentUserId}" />
+                        <input type="hidden" name="blogId" th:value="${blog.blogId}" />
+                        <button type="submit" class="like-btn"
+                                th:class="${likedBlogs != null and likedBlogs.contains(blog.blogId)} ? 'like-btn liked' : 'like-btn'">
+                            <i class="fa-heart"
+                               th:classappend="${likedBlogs != null and likedBlogs.contains(blog.blogId)} ? 'fas' : 'far'"></i>
+                            <span th:text="${blogLikeCount}">0</span>
+                            <span th:text="${blogLikeCount == 1 ? 'Like' : 'Likes'}">Likes</span>
+                        </button>
+                    </form>
+                </div>
+                <div th:if="${currentUserId == null}" class="login-prompt">
+                    <div class="login-prompt-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <strong>Login to like this blog and show your appreciation!</strong>
+                </div>
+            </div>
+
+            <span class="text-muted">
+              <i class="fas fa-eye me-1"></i>
+              <span th:text="${blog.views}">0</span> views
+            </span>
+
+            <!-- Comments Section -->
+            <div class="comments-section">
+                <h4 class="comments-title">
+                    <i class="fas fa-comments"></i>
+                    Comments
+                </h4>
+
+                <div th:if="${blog.comments != null and not #lists.isEmpty(blog.comments)}">
+                    <div class="comment-item" th:each="comment : ${blog.comments}">
+                        <div class="comment-author" th:text="${comment.user.username}">Username</div>
+                        <div class="comment-text" th:text="${comment.comment}">Comment</div>
+                    </div>
+                </div>
+
+                <div th:if="${blog.comments == null or #lists.isEmpty(blog.comments)}" class="no-comments">
+                    <div class="no-comments-icon">
+                        <i class="fas fa-comment-slash"></i>
+                    </div>
+                    <p class="no-comments-text">No comments yet. Be the first to share your thoughts!</p>
+                </div>
+
+                <!-- Comment Form -->
+                <div th:if="${currentUserId != null}" class="comment-form">
+                    <h5 class="comment-form-title">
+                        <i class="fas fa-edit"></i>
+                        Add Your Comment
+                    </h5>
+                    <form th:action="@{/post}" method="post">
+                        <input type="hidden" name="blogId" th:value="${blog.blogId}" />
+                        <div class="mb-3">
+                            <textarea name="commentText" class="form-control" rows="4"
+                                      placeholder="Share your thoughts about this blog post..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-paper-plane"></i>
+                            Submit Comment
+                        </button>
+                    </form>
+                </div>
+
+                <div th:if="${currentUserId == null}" class="login-prompt">
+                    <div class="login-prompt-icon">
+                        <i class="fas fa-comment"></i>
+                    </div>
+                    <strong>Login to join the conversation and share your thoughts!</strong>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>

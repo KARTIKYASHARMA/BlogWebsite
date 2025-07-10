@@ -3,10 +3,7 @@ package net.sample.wordpress.controller;
 import jakarta.servlet.http.Cookie;
 import net.sample.wordpress.entity.Blog;
 import net.sample.wordpress.entity.User;
-import net.sample.wordpress.service.BlogService;
-import net.sample.wordpress.service.JwtService;
-import net.sample.wordpress.service.LikesService;
-import net.sample.wordpress.service.UserService;
+import net.sample.wordpress.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +32,9 @@ public class WordPressBlogController {
     JwtService jwtService;
     @Autowired
     private LikesService likesService;
+    @Autowired
+    private SubscriptionService subscriptionService;
+
 
 
 
@@ -110,10 +110,64 @@ public class WordPressBlogController {
 
     // get all blogs
 
+//    @GetMapping("/show-all-blogs")
+//    public String showAllBlogs(Model model,HttpServletRequest request) {
+//        //String jwtToken = extractJwtFromCookies(request);
+//        List<Blog> blogList=blogService.getAllBlogs();
+//        logger.debug("Fetched {} total blogs", blogList.size());
+//
+//        List<Long> userIds = blogList.stream()
+//                .map(blog -> blog.getUser() != null ? blog.getUser().getUserId() : null)
+//                .filter(Objects::nonNull)
+//                .distinct()
+//                .collect(Collectors.toList());
+//
+//        //Set<Long> uniqueValues = new HashSet<>();
+//        Map<Long, Long> blogIdToLikeCount = new HashMap<>();
+//        for (Blog blog : blogList) {
+//            blogIdToLikeCount.put(blog.getBlogId(), likesService.getLikeCountForBlog(blog.getBlogId()));
+//        }
+//        logger.debug("Blog like counts: {}", blogIdToLikeCount);
+//
+//
+//
+//        List<User> users =userService.findAllById(userIds);
+//        Map<Long, String> userIdToUsername = users.stream()
+//                .collect(Collectors.toMap(User::getUserId, User::getUsername));
+//
+//        logger.debug("Fetched {} users for blog attribution", users.size());
+//
+//        model.addAttribute("blogLikeCounts", blogIdToLikeCount);
+//        model.addAttribute("blogList", blogList);
+//        model.addAttribute("usernames",userIdToUsername);
+//
+//        String token = extractJwtFromCookies(request);
+//
+//        if (token != null) {
+//            Long userId = jwtService.extractUserId(token);
+//            Set<Long> likedBlogs = likesService.getBlogIdsLikedByUser(userId);
+//            model.addAttribute("currentUserId", userId);
+//            model.addAttribute("likedBlogs", likedBlogs);
+//            User user = userService.findById(userId);
+//            if (user != null) {
+//                model.addAttribute("currentUsername", user.getUsername());
+//            }
+//            logger.debug("User ID {} has liked {} blogs", userId, likedBlogs.size());
+//        } else {
+//            model.addAttribute("currentUserId", null);
+//            model.addAttribute("likedBlogs", Set.of());
+//            logger.debug("No JWT found, guest user viewing blogs.");
+//        }
+//
+//
+//        return "show-all-blogs";
+//
+//
+//    }
+
     @GetMapping("/show-all-blogs")
-    public String showAllBlogs(Model model,HttpServletRequest request) {
-        //String jwtToken = extractJwtFromCookies(request);
-        List<Blog> blogList=blogService.getAllBlogs();
+    public String showAllBlogs(Model model, HttpServletRequest request) {
+        List<Blog> blogList = blogService.getAllBlogs();
         logger.debug("Fetched {} total blogs", blogList.size());
 
         List<Long> userIds = blogList.stream()
@@ -122,24 +176,19 @@ public class WordPressBlogController {
                 .distinct()
                 .collect(Collectors.toList());
 
-        //Set<Long> uniqueValues = new HashSet<>();
         Map<Long, Long> blogIdToLikeCount = new HashMap<>();
         for (Blog blog : blogList) {
             blogIdToLikeCount.put(blog.getBlogId(), likesService.getLikeCountForBlog(blog.getBlogId()));
         }
-        logger.debug("Blog like counts: {}", blogIdToLikeCount);
 
-
-
-        List<User> users =userService.findAllById(userIds);
+        List<User> users = userService.findAllById(userIds);
         Map<Long, String> userIdToUsername = users.stream()
                 .collect(Collectors.toMap(User::getUserId, User::getUsername));
 
-        logger.debug("Fetched {} users for blog attribution", users.size());
-
         model.addAttribute("blogLikeCounts", blogIdToLikeCount);
         model.addAttribute("blogList", blogList);
-        model.addAttribute("usernames",userIdToUsername);
+        model.addAttribute("usernames", userIdToUsername);
+
         String token = extractJwtFromCookies(request);
 
         if (token != null) {
@@ -147,18 +196,28 @@ public class WordPressBlogController {
             Set<Long> likedBlogs = likesService.getBlogIdsLikedByUser(userId);
             model.addAttribute("currentUserId", userId);
             model.addAttribute("likedBlogs", likedBlogs);
-            logger.debug("User ID {} has liked {} blogs", userId, likedBlogs.size());
+
+            User user = userService.findById(userId);
+            if (user != null) {
+                model.addAttribute("currentUsername", user.getUsername());
+
+                // ✅ ADD subscription info
+                boolean hasActiveSub = subscriptionService.hasActiveSubscription(user);
+                long daysLeft = subscriptionService.daysRemaining(user);
+                model.addAttribute("hasActiveSub", hasActiveSub);
+                model.addAttribute("daysLeft", daysLeft);
+            }
         } else {
             model.addAttribute("currentUserId", null);
             model.addAttribute("likedBlogs", Set.of());
+            model.addAttribute("hasActiveSub", false); // fallback default
+            model.addAttribute("daysLeft", 0L);         // fallback default
             logger.debug("No JWT found, guest user viewing blogs.");
         }
 
-
         return "show-all-blogs";
-
-
     }
+
     @GetMapping("/show-blog")
     public String showUserBlog(Model model, HttpServletRequest request) {
         String jwtToken = extractJwtFromCookies(request);
@@ -204,6 +263,8 @@ public class WordPressBlogController {
         if (blog == null) {
             return "user-not-found"; // or your custom "blog not found" page
         }
+        blog.setViews(blog.getViews() + 1);
+        blogService.saveBlog(blog);
 
         // Add the blog itself
         model.addAttribute("blog", blog);
@@ -228,6 +289,21 @@ public class WordPressBlogController {
 
         return "show-full-blog"; // View template
     }
+
+    @GetMapping("/user-profile")
+    public String userProfile(@RequestParam("id") Long id, Model model) {
+        User user = userService.findById(id); // fetch user by ID
+        if (user == null) {
+            return "error-page"; // handle user not found
+        }
+
+        model.addAttribute("user", user);
+        model.addAttribute("hasActiveSub", user.hasActiveSubscription());
+        model.addAttribute("daysRemaining", user.daysRemainingInSubscription());
+
+        return "user-profile";
+    }
+
     @GetMapping("/delete-blog/{id}")
     public String deleteBlog(@PathVariable Long id, HttpServletRequest request) {
         String token = extractJwtFromCookies(request);
@@ -255,6 +331,59 @@ public class WordPressBlogController {
 
         return "redirect:/user/home-page/show-blog"; // Redirect to user's blog list
     }
+    @GetMapping("/edit-blog/{id}")
+    public String editBlogForm(@PathVariable Long id, Model model, HttpServletRequest request) {
+        String jwtToken = extractJwtFromCookies(request);
+        if (jwtToken == null) return "redirect:/login";
+
+        Long userId = jwtService.extractUserId(jwtToken);
+        Blog blog = blogService.findById(id);
+
+        if (blog == null || !blog.getUser().getUserId().equals(userId)) {
+            return "unauthorized"; // Or error page
+        }
+
+        model.addAttribute("blog", blog);
+        return "fragments/edit-blog-modal :: editBlogForm"; // Only return modal content
+    }
+
+    @PostMapping("/update-blog/{id}")
+    public String updateBlog(@PathVariable Long id,
+                             @ModelAttribute Blog updatedBlog,
+                             @RequestParam(value = "imageFile", required = false) MultipartFile imageFile,
+                             HttpServletRequest request) {
+        String jwtToken = extractJwtFromCookies(request);
+        if (jwtToken == null) return "redirect:/login";
+
+        Long userId = jwtService.extractUserId(jwtToken);
+        Blog existingBlog = blogService.findById(id);
+
+        if (existingBlog == null || !existingBlog.getUser().getUserId().equals(userId)) {
+            return "unauthorized";
+        }
+
+        existingBlog.setTitle(updatedBlog.getTitle());
+        existingBlog.setContent(updatedBlog.getContent());
+       // existingBlog.setImagePath(updatedBlog.getImagePath());
+
+        if (imageFile != null && !imageFile.isEmpty()) {
+            try {
+                String uploadsDir = System.getProperty("user.dir") + "/uploads/";
+                java.io.File dir = new java.io.File(uploadsDir);
+                if (!dir.exists()) dir.mkdirs();
+                String fileName = java.util.UUID.randomUUID() + "_" + imageFile.getOriginalFilename();
+                String filePath = uploadsDir + fileName;
+                imageFile.transferTo(new java.io.File(filePath));
+                existingBlog.setImagePath("/uploads/" + fileName);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        blogService.saveBlog(existingBlog);
+        return "redirect:/user/home-page/show-blog";
+    }
+
 
 
 

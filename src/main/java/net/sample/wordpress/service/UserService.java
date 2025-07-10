@@ -1,19 +1,22 @@
 package net.sample.wordpress.service;
 
 import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import net.sample.wordpress.entity.Subscription;
+import net.sample.wordpress.entity.SubscriptionType;
 import net.sample.wordpress.entity.User;
 import net.sample.wordpress.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -29,7 +32,7 @@ public class UserService {
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    private BCryptPasswordEncoder encoder ;
+    private BCryptPasswordEncoder encoder;
 
     @Autowired
     private JwtService jwtService;
@@ -39,11 +42,18 @@ public class UserService {
     }
 
     public User saveUser(User user) {
+        if (userRepository.existsByUsername(user.getUsername())) {
+            throw new IllegalArgumentException("Username already exists");
+        }
+
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new IllegalArgumentException("Email already registered");
+        }
+
         user.setPassword(encoder.encode(user.getPassword()));
         User savedUser = userRepository.save(user);
         logger.info("New user registered: {}", savedUser.getUsername());
-       return savedUser;
-
+        return savedUser;
     }
 
     public User findById(Long id) {
@@ -60,16 +70,10 @@ public class UserService {
             User userFromDb = userRepository.findByUsername(user.getUsername());
             boolean matches = encoder.matches(user.getPassword(), userFromDb.getPassword());
             logger.debug("Password match for {}: {}", user.getUsername(), matches);
-//            System.out.println("Raw: " + user.getPassword());
-//            System.out.println("Hashed: " + userFromDb.getPassword());
-//            System.out.println("Matches: " + encoder.matches(user.getPassword(), userFromDb.getPassword()));
-
-
 
             if (authentication.isAuthenticated()) {
-                //System.out.println("token:"+jwtService.generateToken(userFromDb.getUsername(),userFromDb.getUserId()));
                 logger.info("JWT issued for user: {}", userFromDb.getUsername());
-                return jwtService.generateToken(userFromDb.getUsername(),userFromDb.getUserId());
+                return jwtService.generateToken(userFromDb.getUsername(), userFromDb.getUserId());
             } else {
                 logger.warn("Authentication failed for user: {}", user.getUsername());
             }
@@ -88,6 +92,7 @@ public class UserService {
         logger.debug("Finding user by username: {}", username);
         return userRepository.findByUsername(username);
     }
+
     @Transactional
     public void deleteUser(Long userId) {
         if (userRepository.existsById(userId)) {
@@ -97,5 +102,6 @@ public class UserService {
             logger.warn("Attempted to delete non-existent user ID: {}", userId);
         }
     }
+
 
 }

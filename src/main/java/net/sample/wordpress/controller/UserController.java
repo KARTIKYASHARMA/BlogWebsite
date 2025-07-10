@@ -1,11 +1,15 @@
 package net.sample.wordpress.controller;
 
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import net.sample.wordpress.entity.Blog;
+import net.sample.wordpress.entity.SubscriptionType;
 import net.sample.wordpress.entity.User;
 import net.sample.wordpress.service.BlogService;
+import net.sample.wordpress.service.JwtService;
+import net.sample.wordpress.service.SubscriptionService;
 import net.sample.wordpress.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,13 +29,32 @@ public class UserController {
 
     @Autowired
     private BlogService blogService;
+    @Autowired
+    private SubscriptionService subscriptionService;
+    @Autowired
+    private JwtService jwtService;
+
+
 
 
 
     @GetMapping("/")
-    public String homePage(Model model) {
+    public String homePage(Model model,HttpServletRequest request) {
         logger.debug("GET /user/home-page/ - Loading homepage");
         List<Blog> blogs = blogService.getAllBlogs();
+        String jwtToken = extractJwtFromCookies(request);
+        if (jwtToken == null) return "redirect:/login";
+
+
+        Long loggedInUserId=jwtService.extractUserId(jwtToken);
+        User user = userService.findById(loggedInUserId); // Get from JWT or session
+
+        boolean hasActiveSub = subscriptionService.hasActiveSubscription(user);
+        long daysLeft = subscriptionService.daysRemaining(user);
+
+        model.addAttribute("hasActiveSub", hasActiveSub);
+        model.addAttribute("daysLeft", daysLeft);
+
         logger.info("Loaded {} blogs for homepage", blogs.size());
         model.addAttribute("blogs", blogs);
         return "home-page";
@@ -86,6 +109,51 @@ public class UserController {
             model.addAttribute("error", "Error deleting user.");
             return "error-page";
         }
+    }
+    @GetMapping("/subscribe")
+    public String showSubscribePage(HttpServletRequest request, Model model) {
+        String jwtToken = extractJwtFromCookies(request);
+        if (jwtToken == null) return "redirect:/login";
+
+        Long userId = jwtService.extractUserId(jwtToken);
+        model.addAttribute("userId", userId);
+        model.addAttribute("subscriptionTypes", SubscriptionType.values());
+
+        return "subscribe"; // Thymeleaf template
+    }
+    @PostMapping("/subscribe")
+    public String subscribeUser(@RequestParam("userId") Long userId,
+                                @RequestParam("type") SubscriptionType type,
+                                Model model) {
+        User user = userService.findById(userId);
+        if (user == null) {
+            model.addAttribute("error", "User not found");
+            return "error-page";
+        }
+
+        // ✅ Check if user already has an active subscription
+        if (subscriptionService.hasActiveSubscription(user)) {
+            model.addAttribute("error", "You already have an active subscription.");
+            model.addAttribute("userId", userId);
+            model.addAttribute("subscriptionTypes", SubscriptionType.values());
+            return "subscribe"; // Show error on same page
+        }
+
+        // ✅ Proceed only if no active subscription
+        subscriptionService.createSubscription(user, type, 7); // 7-day duration
+        return "redirect:/user/home-page/show-all-blogs?subscribed=true";
+    }
+
+
+    private String extractJwtFromCookies(HttpServletRequest request) {
+        if (request.getCookies() != null) {
+            for (Cookie cookie : request.getCookies()) {
+                if ("jwt".equals(cookie.getName())) {
+                    return cookie.getValue();
+                }
+            }
+        }
+        return null;
     }
 
 

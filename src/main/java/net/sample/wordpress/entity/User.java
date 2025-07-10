@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,8 +26,8 @@ public class User {
 
     @NotBlank(message = "Password is required")
     @Pattern(
-            regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$",
-            message = "Password mutter, dist be at least 8 characters long, include an uppercase letter, lowercase legit, and special character"
+            regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z\\d])[\\S]{8,}$",
+            message = "Password must be at least 8 characters long and include an uppercase letter, lowercase letter, number, and special character."
     )
     @Column(nullable = false)
     private String password;
@@ -68,5 +69,25 @@ public class User {
         comments.add(comment);
         comment.setUser(this);
     }
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
+    private List<Subscription> subscriptions = new ArrayList<>();
+
+    public void addSubscription(Subscription subscription) {
+        subscriptions.add(subscription);
+        subscription.setUser(this);
+    }
+    public boolean hasActiveSubscription() {
+        return subscriptions.stream()
+                .anyMatch(s -> s.isActive() && s.getEndDate().isAfter(LocalDate.now()));
+    }
+    public long daysRemainingInSubscription() {
+        return subscriptions.stream()
+                .filter(s -> s.isActive() && s.getEndDate().isAfter(LocalDate.now()))
+                .map(s -> LocalDate.now().until(s.getEndDate()).getDays())
+                .findFirst().orElse(0);
+    }
+
+
 
 }

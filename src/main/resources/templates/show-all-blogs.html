@@ -2,13 +2,39 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Design For Life | Blog</title>
 
-  <!-- Include Bootstrap CSS in your <head> -->
+  <!-- Include Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
   <style>
+    :root {
+      --primary-gradient: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+      --secondary-gradient: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      --accent-gradient: linear-gradient(135deg, #fecaca 0%, #dc2626 100%);
+      --text-primary: #1f2937;
+      --text-secondary: #6b7280;
+      --text-light: #9ca3af;
+      --bg-primary: #ffffff;
+      --bg-secondary: #f9fafb;
+      --bg-tertiary: #f3f4f6;
+      --border-color: #e5e7eb;
+      --border-light: #f3f4f6;
+      --shadow-light: 0 1px 3px rgba(0, 0, 0, 0.1);
+      --shadow-medium: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --shadow-heavy: 0 10px 15px rgba(0, 0, 0, 0.1);
+      --border-radius: 12px;
+      --border-radius-sm: 8px;
+      --transition: all 0.3s ease;
+      --red-50: #fef2f2;
+      --red-100: #fee2e2;
+      --red-600: #dc2626;
+      --red-700: #b91c1c;
+      --red-800: #991b1b;
+    }
+
     * {
       margin: 0;
       padding: 0;
@@ -16,120 +42,97 @@
     }
 
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f8f9fa;
-      color: #333;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg-secondary);
+      color: var(--text-primary);
       line-height: 1.6;
+      overflow-x: hidden;
     }
 
-    /* Header Styles */
-    .header {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      padding: 60px 0;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .header::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
-      opacity: 0.3;
-    }
+    /* Clean, minimalist navbar */
     .navbar {
-      background: white;
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      background: var(--bg-primary);
+      border-bottom: 1px solid var(--border-color);
       position: sticky;
       top: 0;
       z-index: 1000;
-      box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+      box-shadow: var(--shadow-light);
+      transition: var(--transition);
+      padding: 1rem 0;
     }
 
-    .navbar .nav-link {
-      color: #333 !important;
+    .navbar-scrolled {
+      box-shadow: var(--shadow-medium);
+    }
+
+    .navbar-brand {
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: var(--red-600);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .navbar-brand:hover {
+      color: var(--red-700);
+    }
+
+    .nav-link {
+      color: var(--text-primary) !important;
       font-weight: 500;
-      margin: 0 10px;
-      transition: all 0.3s ease;
-      position: relative;
+      margin: 0 0.5rem;
+      padding: 0.5rem 1rem !important;
+      border-radius: var(--border-radius-sm);
+      transition: var(--transition);
+      text-decoration: none;
     }
 
-    .navbar .nav-link:hover {
-      color: #667eea !important;
-      transform: translateY(-2px);
+    .nav-link:hover {
+      background: var(--red-50);
+      color: var(--red-600) !important;
     }
 
-    .navbar .nav-link::after {
-      content: '';
-      position: absolute;
-      width: 0;
-      height: 2px;
-      bottom: -5px;
-      left: 50%;
-      background: #667eea;
-      transition: all 0.3s ease;
-      transform: translateX(-50%);
+    /* Clean hero section */
+    .hero-section {
+      background: var(--bg-primary);
+      padding: 5rem 0;
+      border-bottom: 1px solid var(--border-color);
     }
 
-    .navbar .nav-link:hover::after {
-      width: 100%;
+    .hero-content {
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto;
     }
 
     .logo {
       font-size: 3.5rem;
-      font-weight: 300;
-      letter-spacing: 8px;
-      margin-bottom: 10px;
-      position: relative;
-      z-index: 2;
+      font-weight: 200;
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+      color: var(--red-600);
     }
 
     .tagline {
-      font-size: 1.1rem;
-      font-weight: 300;
-      letter-spacing: 2px;
-      opacity: 0.9;
-      position: relative;
-      z-index: 2;
-    }
-    /* Hero Section */
-    .hero-section {
-      background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), 
-                  url('https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
-      background-size: cover;
-      background-position: center;
-      padding: 100px 0;
-      position: relative;
+      font-size: 1.2rem;
+      font-weight: 400;
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin: 0 auto;
     }
 
-    .hero-content {
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(10px);
-      border-radius: 20px;
-      padding: 60px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-
-    /* Blog Section */
+    /* Clean blog section */
     .blog-section {
-      margin-top: 60px;
-      padding: 80px 0;
-      background: #fff;
+      padding: 4rem 0;
+      background: var(--bg-secondary);
     }
 
     .section-title {
       font-size: 2.5rem;
       font-weight: 300;
       text-align: center;
-      margin-bottom: 60px;
-      color: #333;
+      margin-bottom: 3rem;
+      color: var(--text-primary);
       position: relative;
     }
 
@@ -137,61 +140,43 @@
       content: '';
       position: absolute;
       width: 60px;
-      height: 3px;
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      bottom: -10px;
+      height: 2px;
+      background: var(--red-600);
+      bottom: -1rem;
       left: 50%;
       transform: translateX(-50%);
-      border-radius: 2px;
     }
 
-    /* Updated Blog Card Styles */
-    /*.blog-card {*/
-    /*  background: #fff;*/
-    /*  border-radius: 15px;*/
-    /*  overflow: hidden;*/
-    /*  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);*/
-    /*  transition: all 0.3s ease;*/
-    /*  border: 1px solid rgba(0, 0, 0, 0.05);*/
-    /*  margin-bottom: 40px;*/
-    /*  position: relative;*/
-    /*  display: flex;*/
-    /*  min-height: 320px; !* Increased from 280px *!*/
-    /*  height: auto; !* Allow it to grow as needed *!*/
-
-    /*}*/
-
+    /* Minimalist blog cards */
     .blog-card {
-      background: #fff;
-      border-radius: 15px;
+      background: var(--bg-primary);
+      border-radius: var(--border-radius);
       overflow: hidden;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-      transition: all 0.3s ease;
-      border: 1px solid rgba(0, 0, 0, 0.05);
-      margin-bottom: 40px;
-      position: relative;
+      box-shadow: var(--shadow-light);
+      transition: var(--transition);
+      border: 1px solid var(--border-color);
+      margin-bottom: 2rem;
       display: flex;
-      height: auto;
-      min-height: 320px;
+      min-height: 300px;
     }
-
 
     .blog-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-heavy);
     }
 
     .blog-image-container {
-      flex: 0 0 300px;
+      flex: 0 0 280px;
       position: relative;
       overflow: hidden;
+      background: var(--bg-tertiary);
     }
 
     .blog-image {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: transform 0.4s ease;
+      transition: var(--transition);
     }
 
     .blog-card:hover .blog-image {
@@ -200,136 +185,331 @@
 
     .blog-content {
       flex: 1;
-      padding: 30px;
+      padding: 2rem;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      gap: 10px; /* Add spacing between blocks */
     }
 
     .blog-main-content {
       flex-grow: 1;
-      overflow: visible;
     }
 
     .blog-title {
-      font-size: 1.6rem;
-      font-weight: 700;
-      margin-bottom: 15px;
-      color: #333;
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: var(--text-primary);
       line-height: 1.3;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
     }
 
     .blog-excerpt {
-      color: #666;
+      color: var(--text-secondary);
       font-size: 1rem;
       line-height: 1.6;
-      margin-bottom: 0;
+      margin-bottom: 1.5rem;
     }
 
+    .btn-read-more {
+      background: var(--red-600);
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--border-radius-sm);
+      color: white;
+      font-weight: 500;
+      text-decoration: none;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      width: fit-content;
+    }
+
+    .btn-read-more:hover {
+      background: var(--red-700);
+      transform: translateY(-2px);
+      color: white;
+    }
+
+    /* Clean blog meta */
     .blog-meta {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding-top: 20px;
-      border-top: 1px solid #eee;
-      font-size: 0.85rem;
-      color: #999;
-      margin-top: 20px;
-      flex-wrap: wrap;
-      row-gap: 10px
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border-light);
+      margin-top: 1.5rem;
     }
-
 
     .blog-author-info {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 0.75rem;
     }
 
     .author-avatar {
-      width: 32px;
-      height: 32px;
+      width: 36px;
+      height: 36px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #667eea, #764ba2);
+      background: var(--red-600);
       display: flex;
       align-items: center;
       justify-content: center;
       color: white;
-      font-weight: bold;
-      font-size: 0.8rem;
+      font-weight: 600;
+      font-size: 0.875rem;
     }
 
     .author-details {
       display: flex;
       flex-direction: column;
-      gap: 2px;
+      gap: 0.125rem;
     }
 
     .author-name {
       font-weight: 600;
-      color: #333;
-      font-size: 0.9rem;
+      color: var(--text-primary);
+      font-size: 0.875rem;
     }
 
     .blog-date {
-      color: #999;
-      font-size: 0.8rem;
+      color: var(--text-light);
+      font-size: 0.75rem;
     }
 
-    .blog-stats {
-      display: flex;
-      align-items: center;
-      gap: 15px;
+    /* Clean comments section */
+    .comments-section {
+      background: var(--bg-tertiary);
+      border-radius: var(--border-radius-sm);
+      padding: 1.5rem;
+      margin-top: 1.5rem;
     }
 
-    .stat-item {
+    .comments-title {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: var(--text-primary);
+    }
+
+    .comment-item {
+      background: var(--bg-primary);
+      border-radius: var(--border-radius-sm);
+      padding: 1rem;
+      margin-bottom: 0.75rem;
+      border: 1px solid var(--border-color);
+    }
+
+    .comment-author {
+      font-weight: 600;
+      color: var(--text-primary);
+      font-size: 0.875rem;
+    }
+
+    .comment-text {
+      color: var(--text-secondary);
+      margin-top: 0.25rem;
+      font-size: 0.875rem;
+    }
+
+    .comment-form {
+      margin-top: 1rem;
+    }
+
+    .comment-form textarea {
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius-sm);
+      padding: 0.75rem;
+      transition: var(--transition);
+      resize: vertical;
+    }
+
+    .comment-form textarea:focus {
+      border-color: var(--red-600);
+      box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+      outline: none;
+    }
+
+    /* Clean like button */
+    .like-section {
       display: flex;
       align-items: center;
-      gap: 5px;
-      color: #999;
-      font-size: 0.85rem;
+      gap: 0.5rem;
     }
 
     .like-btn {
       background: none;
       border: none;
-      color: #e74c3c;
+      color: var(--red-600);
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: var(--transition);
       display: flex;
       align-items: center;
-      gap: 5px;
-      font-size: 0.85rem;
+      gap: 0.375rem;
+      font-size: 0.875rem;
+      padding: 0.5rem;
+      border-radius: var(--border-radius-sm);
     }
 
     .like-btn:hover {
-      transform: scale(1.1);
-      color: #c0392b;
+      background: var(--red-50);
     }
 
-    /* No blogs message */
+    .like-btn.liked {
+      color: var(--red-600);
+    }
+
+    /* Clean no blogs message */
     .no-blogs {
       text-align: center;
-      padding: 60px 20px;
-      font-size: 1.3rem;
-      color: #666;
-      font-weight: 500;
-      background: #fff;
-      border-radius: 15px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-      margin-top: 50px;
-      transition: 0.3s ease;
+      padding: 4rem 2rem;
+      background: var(--bg-primary);
+      border-radius: var(--border-radius);
+      border: 1px solid var(--border-color);
     }
 
+    .no-blogs-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: var(--red-600);
+    }
 
-    /* Responsive Design */
+    .no-blogs-text {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      font-weight: 400;
+    }
+
+    /* Clean alert styles */
+    .alert {
+      border: none;
+      border-radius: var(--border-radius-sm);
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+      border-left: 4px solid;
+    }
+
+    .alert-success {
+      background: #f0fdf4;
+      color: #166534;
+      border-left-color: #16a34a;
+    }
+
+    .alert-danger {
+      background: var(--red-50);
+      color: var(--red-800);
+      border-left-color: var(--red-600);
+    }
+
+    /* Clean buttons */
+    .btn-outline-primary {
+      border-color: var(--red-600);
+      color: var(--red-600);
+      transition: var(--transition);
+      border-radius: var(--border-radius-sm);
+    }
+
+    .btn-outline-primary:hover {
+      background: var(--red-600);
+      border-color: var(--red-600);
+      color: white;
+    }
+
+    .btn-outline-danger {
+      border-color: var(--red-600);
+      color: var(--red-600);
+      transition: var(--transition);
+      border-radius: var(--border-radius-sm);
+    }
+
+    .btn-outline-danger:hover {
+      background: var(--red-600);
+      border-color: var(--red-600);
+      color: white;
+    }
+
+    .btn-outline-warning {
+      border-color: #d97706;
+      color: #d97706;
+      transition: var(--transition);
+      border-radius: var(--border-radius-sm);
+    }
+
+    .btn-outline-warning:hover {
+      background: #d97706;
+      border-color: #d97706;
+      color: white;
+    }
+
+    /* Clean scroll to top button */
+    .scroll-top {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: var(--red-600);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-medium);
+      cursor: pointer;
+      transition: var(--transition);
+      opacity: 0;
+      transform: translateY(100px);
+      z-index: 1000;
+    }
+
+    .scroll-top.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .scroll-top:hover {
+      background: var(--red-700);
+      transform: translateY(-2px);
+    }
+    /* username link */
+    .custom-username a {
+      color: var(--bs-dark);          /* initial colour */
+      text-decoration: none;
+      transition: color .15s ease;    /* smooth change */
+      cursor: pointer;                /* show hand cursor */
+    }
+    .custom-username a:hover,
+    .custom-username a:focus {
+      color: var(--bs-primary);       /* change to Bootstrap “primary” */
+      text-decoration: underline;     /* optional underline */
+    }
+
+    /* Clean social links */
+    .social-link {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      transition: var(--transition);
+      padding: 0.5rem;
+      border-radius: var(--border-radius-sm);
+    }
+
+    .social-link:hover {
+      color: var(--red-600);
+      background: var(--red-50);
+    }
+
+    /* Responsive design */
+    @media (max-width: 1200px) {
+      .blog-image-container {
+        flex: 0 0 240px;
+      }
+    }
+
     @media (max-width: 992px) {
       .blog-card {
         flex-direction: column;
-        height: auto;
+        min-height: auto;
       }
 
       .blog-image-container {
@@ -339,60 +519,88 @@
 
       .blog-meta {
         flex-direction: column;
-        gap: 15px;
+        gap: 1rem;
         align-items: flex-start;
       }
 
-      .blog-stats {
-        align-self: flex-end;
+      .logo {
+        font-size: 2.5rem;
+      }
+
+      .section-title {
+        font-size: 2rem;
       }
     }
 
     @media (max-width: 768px) {
-      .logo {
-        font-size: 2.5rem;
-        letter-spacing: 4px;
+      .hero-section {
+        padding: 3rem 0;
       }
-      
-      .hero-content {
-        padding: 40px 30px;
-      }
-      
+
       .blog-content {
-        padding: 25px;
+        padding: 1.5rem;
       }
-      
+
       .blog-title {
-        font-size: 1.3rem;
+        font-size: 1.25rem;
+      }
+
+      .logo {
+        font-size: 2rem;
+      }
+
+      .tagline {
+        font-size: 1rem;
       }
     }
 
-    /* Animation */
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
+    @media (max-width: 576px) {
+      .hero-section {
+        padding: 2rem 0;
       }
-      to {
-        opacity: 1;
-        transform: translateY(0);
+
+      .blog-section {
+        padding: 3rem 0;
+      }
+
+      .section-title {
+        font-size: 1.75rem;
+        margin-bottom: 2rem;
+      }
+
+      .blog-content {
+        padding: 1.25rem;
+      }
+
+      .comments-section {
+        padding: 1.25rem;
+      }
+
+      .navbar-brand {
+        font-size: 1.25rem;
       }
     }
 
-    .blog-card {
-      animation: fadeInUp 0.6s ease forwards;
+    /* Loading animation */
+    .loading {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: #fff;
+      animation: spin 1s ease-in-out infinite;
     }
 
-    .blog-card:nth-child(2) { animation-delay: 0.1s; }
-    .blog-card:nth-child(3) { animation-delay: 0.2s; }
-    .blog-card:nth-child(4) { animation-delay: 0.3s; }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
   </style>
 </head>
 <body>
-
-<nav class="navbar navbar-expand-lg">
+<nav class="navbar navbar-expand-lg" id="mainNavbar">
   <div class="container">
-    <a class="navbar-brand d-flex align-items-center logo text-dark" href="/">
+    <a class="navbar-brand d-flex align-items-center" href="/">
       <i class="fas fa-home me-2"></i>MySite
     </a>
 
@@ -403,34 +611,53 @@
 
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item"><a class="nav-link" th:href="@{/user/home-page/}">HOME</a></li>
+        <li class="nav-item"><a class="nav-link" th:href="@{/user/home-page/show-all-blogs}">HOME</a></li>
         <li class="nav-item"><a class="nav-link" th:href="@{/user/home-page/show-blog}">VIEW USER BLOGS</a></li>
-       <li class="nav-item"><a class="nav-link" th:href="@{/user/home-page/add-blog/}">ADD A NEW BLOG</a></li>
+        <li class="nav-item"><a class="nav-link" th:href="@{/user/home-page/add-blog/}">ADD A NEW BLOG</a></li>
         <li class="nav-item"><a class="nav-link" href="/about">ABOUT</a></li>
       </ul>
-      <div class="d-flex gap-3">
-        <a href="#" class="text-dark"><i class="fab fa-instagram"></i></a>
-        <a href="#" class="text-dark"><i class="fab fa-pinterest"></i></a>
-        <a href="#" class="text-dark"><i class="fas fa-search"></i></a>
 
-        <!-- Conditional Login/Logout -->
-        <div th:if="${currentUserId != null}">
-          <a th:href="@{/user/home-page/logout}" class="btn btn-outline-danger">
-            <i class="fas fa-sign-out-alt"></i> Logout
+      <!-- Conditional Login/Logout + Subscription -->
+      <div th:if="${currentUserId != null}">
+       <span class="me-2 fw-semibold custom-username">
+          👋 Welcome,
+          <a th:href="@{/user/home-page/user-profile(id=${currentUserId})}">
+            <span class="me-1">👤</span> <!-- user emoji -->
+            <span th:text="${currentUsername}">User</span>
           </a>
-          <form th:action="@{/user/home-page/delete-user-by-id}" method="get" style="display:inline;">
-            <input type="hidden" name="id" th:value="${currentUserId}" />
-            <button type="submit" class="btn btn-outline-warning"
-                    onclick="return confirm('Are you sure you want to delete your account? This action is irreversible.')">
-              <i class="fas fa-user-slash"></i> Delete Account
-            </button>
-          </form>
-        </div>
-        <div th:if="${currentUserId == null}">
-          <a th:href="@{/login}" class="btn btn-outline-primary">
-            <i class="fas fa-sign-in-alt"></i> Login
+
+          <span th:if="${hasActiveSub}" class="badge bg-primary ms-2">
+            Premium
+          </span>
+        </span>
+
+
+
+
+        <!-- Show Subscribe button if user doesn't have an active subscription -->
+        <div th:if="${!hasActiveSub}" class="d-inline-block me-2">
+          <a th:href="@{/user/home-page/subscribe}" class="btn btn-outline-success">
+            <i class="fas fa-star me-1"></i> Subscribe
           </a>
         </div>
+
+        <a th:href="@{/user/home-page/logout}" class="btn btn-outline-danger">
+          <i class="fas fa-sign-out-alt me-1"></i> Logout
+        </a>
+
+        <form th:action="@{/user/home-page/delete-user-by-id}" method="get" style="display:inline;">
+          <input type="hidden" name="id" th:value="${currentUserId}" />
+          <button type="submit" class="btn btn-outline-warning ms-2"
+                  onclick="return confirm('Are you sure you want to delete your account? This action is irreversible.')">
+            <i class="fas fa-user-slash me-1"></i> Delete Account
+          </button>
+        </form>
+      </div>
+
+      <div th:if="${currentUserId == null}">
+        <a th:href="@{/login}" class="btn btn-outline-primary">
+          <i class="fas fa-sign-in-alt me-1"></i> Login
+        </a>
       </div>
     </div>
   </div>
@@ -440,29 +667,37 @@
 <div class="hero-section">
   <div class="container">
     <div class="row justify-content-center">
-      <div class="col-lg-8">
-        <div class="hero-content text-center">
-          <div class="logo">BLOGS</div>
-          <div class="tagline">Creating Beautiful Spaces & Meaningful Experiences</div>
+      <div class="col-lg-10">
+        <div class="hero-content">
+          <div class="logo">THOUGHTS</div>
+          <div class="tagline">Simple stories, meaningful connections, and authentic experiences</div>
         </div>
       </div>
     </div>
   </div>
 </div>
+
 <!-- Blog Section -->
 <div class="blog-section">
   <div class="container">
     <h2 class="section-title">Latest Stories</h2>
 
-<!--    &lt;!&ndash; Info message &ndash;&gt;-->
-<!--    <div th:if="${message}" class="alert alert-info text-center">-->
-<!--      <p th:text="${message}"></p>-->
-<!--    </div>-->
+    <!-- Flash message -->
+    <div th:if="${message}" class="alert alert-success">
+      <i class="fas fa-check-circle me-2"></i>
+      <span th:text="${message}"></span>
+    </div>
+    <div th:if="${error}" class="alert alert-danger">
+      <i class="fas fa-exclamation-triangle me-2"></i>
+      <span th:text="${error}"></span>
+    </div>
 
     <!-- No blogs -->
-    <div th:if="${#lists.isEmpty(blogList)}" class="no-blogs text-center">
-      <i class="fas fa-pen-fancy" style="font-size: 3rem; margin-bottom: 20px; color: #ddd;"></i>
-      <p>No blog entries found. Check back soon for inspiring content!</p>
+    <div th:if="${#lists.isEmpty(blogList)}" class="no-blogs">
+      <div class="no-blogs-icon">
+        <i class="fas fa-pen-fancy"></i>
+      </div>
+      <div class="no-blogs-text">No stories to share yet. Check back soon for inspiring content.</div>
     </div>
 
     <!-- Blog Cards -->
@@ -477,81 +712,92 @@
           <div class="blog-content">
             <div class="blog-main-content">
               <h3 class="blog-title" th:text="${blog.title}">Blog Title</h3>
-              <p class="blog-excerpt" th:text="${#strings.abbreviate(blog.content, 120)}">
+              <p class="blog-excerpt" th:text="${#strings.abbreviate(blog.content, 150)}">
                 Blog content preview...
               </p>
-              <a th:href="@{'/user/home-page/show-full-blog/' + ${blog.blogId}}" class="btn btn-sm btn-outline-primary mt-2">
-                Read More
+              <a th:href="@{'/user/home-page/show-full-blog/' + ${blog.blogId}}"
+                 class="btn-read-more">
+                Read More <i class="fas fa-arrow-right"></i>
               </a>
-
             </div>
 
             <div class="blog-meta">
+              <!-- Author & Date -->
               <div class="blog-author-info">
-                <div class="author-avatar">
-                  A
-                </div>
+                <div class="author-avatar">A</div>
                 <div class="author-details">
                   <div class="author-name" th:text="${usernames[blog.user.userId]}">Author Name</div>
-                  <div class="blog-date" th:text="${#dates.format(blog.createdDate, 'MMM dd, yyyy')}">
-                    Date
+                  <div class="blog-date" th:text="${#dates.format(blog.createdDate, 'MMM dd, yyyy')}">Date</div>
+                </div>
+              </div>
+
+              <!-- Like Button Section -->
+              <div class="like-section">
+                <div th:if="${currentUserId != null}">
+                  <form th:action="@{/like}" method="post" style="display: inline;">
+                    <input type="hidden" name="blogId" th:value="${blog.blogId}" />
+                    <button type="submit" class="like-btn"
+                            th:classappend="${likedBlogs != null and likedBlogs.contains(blog.blogId)} ? 'liked' : ''">
+                      <i class="fa-heart"
+                         th:classappend="${likedBlogs != null and likedBlogs.contains(blog.blogId)} ? 'fas' : 'far'">
+                      </i>
+                      <span th:text="${blogLikeCounts[blog.blogId] ?: 0}">0</span>
+                    </button>
+                  </form>
+                </div>
+                <div th:if="${currentUserId == null}">
+                  <span class="like-btn" style="cursor: default;">
+                    <i class="fa-heart far"></i>
+                    <span th:text="${blogLikeCounts[blog.blogId] ?: 0}">0</span>
+                  </span>
+                  <small class="text-muted ms-2">
+                    <a th:href="@{/login}" class="text-decoration-none">Login to like</a>
+                  </small>
+                </div>
+              </div>
+            </div>
+            <span class="text-muted">
+              <i class="fas fa-eye me-1"></i>
+              <span th:text="${blog.views}">0</span> views
+            </span>
+
+            <!-- Comments Section -->
+            <div class="comments-section">
+              <h6 class="comments-title">
+                <i class="fas fa-comments me-2"></i>Comments
+              </h6>
+
+              <div th:if="${blog.comments != null and !#lists.isEmpty(blog.comments)}">
+                <div class="comment-item" th:each="comment : ${blog.comments}">
+                  <div class="comment-author" th:text="${comment.user.username}">Username</div>
+                  <div class="comment-text" th:text="${comment.comment}">Sample comment</div>
+                </div>
+              </div>
+
+              <div th:if="${blog.comments == null or #lists.isEmpty(blog.comments)}" class="text-muted">
+                <i class="fas fa-comment-slash me-2"></i>No comments yet. Be the first to share your thoughts.
+              </div>
+
+              <!-- Comment form (only for logged-in users) -->
+              <div th:if="${currentUserId != null}" class="comment-form">
+                <form th:action="@{/post}" method="post">
+                  <input type="hidden" name="blogId" th:value="${blog.blogId}" />
+                  <div class="mb-3">
+                    <textarea name="commentText" class="form-control" rows="3"
+                              placeholder="Share your thoughts..." required></textarea>
                   </div>
-                </div>
+                  <button type="submit" class="btn btn-outline-primary">
+                    <i class="fas fa-paper-plane me-1"></i>Post Comment
+                  </button>
+                </form>
               </div>
 
-              <!-- Stats -->
-              <div class="stat-item">
-                <i class="far fa-comment"></i>
-                <span th:text="${#lists.size(blog.comments)} + ' comments'">0 comments</span>
+              <div th:if="${currentUserId == null}" class="text-muted mt-3">
+                <i class="fas fa-sign-in-alt me-2"></i>
+                <a th:href="@{/login}" class="text-decoration-none">Login</a> to join the conversation.
               </div>
+            </div>
 
-              <!-- Comments -->
-              <div class="ps-3 pt-2">
-                <h6>Comments:</h6>
-                <div th:if="${blog.comments != null and !#lists.isEmpty(blog.comments)}">
-                  <ul class="list-unstyled">
-                    <li th:each="comment : ${blog.comments}">
-                      <strong th:text="${comment.user.username}">Username</strong>:
-                      <span th:text="${comment.comment}">Sample comment</span>
-                    </li>
-                  </ul>
-                </div>
-                <div th:if="${blog.comments == null or #lists.isEmpty(blog.comments)}" class="text-muted">
-                  No comments yet.
-                </div>
-              </div>
-
-              <!-- Add Comment Form -->
-              <form th:action="@{/post}" method="post" class="ps-3 pt-2">
-                <input type="hidden" name="blogId" th:value="${blog.blogId}" />
-                <div class="mb-2">
-                  <textarea name="commentText" class="form-control" rows="2" placeholder="Write a comment..." required></textarea>
-                </div>
-                <button type="submit" class="btn btn-sm btn-outline-primary">Post Comment</button>
-              </form>
-
-              <!-- Like Form -->
-              <form th:action="@{/like}" method="post">
-                <input type="hidden" name="userId" th:value="${currentUserId}" />
-                <input type="hidden" name="blogId" th:value="${blog.blogId}" />
-                <button type="submit" class="like-btn" style="background: none; border: none;">
-                  <i class="fa-heart"
-                     th:classappend="${likedBlogs != null and likedBlogs.contains(blog.blogId)} ? 'fas text-danger' : 'far'">
-                  </i>
-                  <span th:text="${blogLikeCounts[blog.blogId] ?: 0}">0</span>
-                </button>
-<!--              </form>-->
-<!--              &lt;!&ndash; Delete Blog Button: Visible only to blog owner &ndash;&gt;-->
-<!--              <div th:if="${currentUserId != null and blog.user.userId == currentUserId}" class="pt-2">-->
-<!--                <a th:href="@{'/user/home-page/delete-blog/' + ${blog.blogId}}"-->
-<!--                   onclick="return confirm('Are you sure you want to delete this blog?');"-->
-<!--                   class="btn btn-sm btn-danger">-->
-<!--                  <i class="fas fa-trash-alt"></i> Delete-->
-<!--                </a>-->
-<!--              </div>-->
-
-
-            </div> <!-- blog-meta -->
           </div> <!-- blog-content -->
         </article>
       </div>
@@ -559,6 +805,59 @@
   </div> <!-- container -->
 </div> <!-- blog-section -->
 
+<!-- Scroll to top button -->
+<button class="scroll-top" id="scrollTop">
+  <i class="fas fa-chevron-up"></i>
+</button>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // Navbar scroll effect
+  window.addEventListener('scroll', function() {
+    const navbar = document.getElementById('mainNavbar');
+    if (window.scrollY > 50) {
+      navbar.classList.add('navbar-scrolled');
+    } else {
+      navbar.classList.remove('navbar-scrolled');
+    }
+  });
+
+  // Scroll to top button
+  const scrollTopBtn = document.getElementById('scrollTop');
+
+  window.addEventListener('scroll', function() {
+    if (window.scrollY > 500) {
+      scrollTopBtn.classList.add('visible');
+    } else {
+      scrollTopBtn.classList.remove('visible');
+    }
+  });
+
+  scrollTopBtn.addEventListener('click', function() {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  });
+
+  // Add loading state to forms
+  document.querySelectorAll('form').forEach(form => {
+    form.addEventListener('submit', function(e) {
+      const submitBtn = form.querySelector('button[type="submit"]');
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<span class="loading"></span> Loading...';
+
+        // Re-enable after 3 seconds as fallback
+        setTimeout(() => {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalText;
+        }, 3000);
+      }
+    });
+  });
+</script>
+
 </body>
 </html>

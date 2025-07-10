@@ -24,6 +24,10 @@ public class Blog {
 
     private int likeCount;
 
+    @Column(nullable = false)
+    private int views = 0;
+
+
 
     @OneToMany(mappedBy = "blog", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Comments> comments = new ArrayList<>();

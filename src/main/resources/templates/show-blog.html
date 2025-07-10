@@ -1,536 +1,587 @@
-<!--<!DOCTYPE html>-->
-<!--<html lang="en" xmlns:th="https://www.thymeleaf.org">-->
-<!--<head>-->
-<!--    <meta charset="UTF-8">-->
-<!--    <title>Design For Life | User Blogs</title>-->
-<!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">-->
-<!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">-->
-<!--    <style>-->
-<!--        * {-->
-<!--            margin: 0;-->
-<!--            padding: 0;-->
-<!--            box-sizing: border-box;-->
-<!--        }-->
-
-<!--        body {-->
-<!--            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;-->
-<!--            background-color: #f8f9fa;-->
-<!--            color: #333;-->
-<!--            line-height: 1.6;-->
-<!--        }-->
-
-<!--        /* Header Styles */-->
-<!--        .header {-->
-<!--            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);-->
-<!--            color: white;-->
-<!--            padding: 60px 0;-->
-<!--            text-align: center;-->
-<!--            position: relative;-->
-<!--            overflow: hidden;-->
-<!--        }-->
-
-<!--        .header::before {-->
-<!--            content: '';-->
-<!--            position: absolute;-->
-<!--            top: 0;-->
-<!--            left: 0;-->
-<!--            right: 0;-->
-<!--            bottom: 0;-->
-<!--            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');-->
-<!--            opacity: 0.3;-->
-<!--        }-->
-
-<!--        .navbar {-->
-<!--            background: rgba(255, 255, 255, 0.95);-->
-<!--            backdrop-filter: blur(10px);-->
-<!--            border-bottom: 1px solid rgba(0, 0, 0, 0.1);-->
-<!--            position: sticky;-->
-<!--            top: 0;-->
-<!--            z-index: 1000;-->
-<!--            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);-->
-<!--        }-->
-
-<!--        .navbar .nav-link {-->
-<!--            color: #333 !important;-->
-<!--            font-weight: 500;-->
-<!--            margin: 0 10px;-->
-<!--            transition: all 0.3s ease;-->
-<!--            position: relative;-->
-<!--        }-->
-
-<!--        .navbar .nav-link:hover {-->
-<!--            color: #667eea !important;-->
-<!--            transform: translateY(-2px);-->
-<!--        }-->
-
-<!--        .navbar .nav-link::after {-->
-<!--            content: '';-->
-<!--            position: absolute;-->
-<!--            width: 0;-->
-<!--            height: 2px;-->
-<!--            bottom: -5px;-->
-<!--            left: 50%;-->
-<!--            background: #667eea;-->
-<!--            transition: all 0.3s ease;-->
-<!--            transform: translateX(-50%);-->
-<!--        }-->
-
-<!--        .navbar .nav-link:hover::after {-->
-<!--            width: 100%;-->
-<!--        }-->
-
-<!--        .logo {-->
-<!--            font-size: 3.5rem;-->
-<!--            font-weight: 300;-->
-<!--            letter-spacing: 8px;-->
-<!--            margin-bottom: 10px;-->
-<!--            position: relative;-->
-<!--            z-index: 2;-->
-<!--        }-->
-
-<!--        .tagline {-->
-<!--            font-size: 1.1rem;-->
-<!--            font-weight: 300;-->
-<!--            letter-spacing: 2px;-->
-<!--            opacity: 0.9;-->
-<!--            position: relative;-->
-<!--            z-index: 2;-->
-<!--        }-->
-
-<!--        /* Hero Section */-->
-<!--        .hero-section {-->
-<!--            background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), -->
-<!--                        url('https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');-->
-<!--            background-size: cover;-->
-<!--            background-position: center;-->
-<!--            padding: 100px 0;-->
-<!--            position: relative;-->
-<!--        }-->
-
-<!--        .hero-content {-->
-<!--            background: rgba(255, 255, 255, 0.95);-->
-<!--            backdrop-filter: blur(10px);-->
-<!--            border-radius: 20px;-->
-<!--            padding: 60px;-->
-<!--            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);-->
-<!--            border: 1px solid rgba(255, 255, 255, 0.2);-->
-<!--        }-->
-
-<!--        /* Blog Section */-->
-<!--        .blog-section {-->
-<!--            padding: 80px 0;-->
-<!--            background: #fff;-->
-<!--        }-->
-
-<!--        .section-title {-->
-<!--            font-size: 2.5rem;-->
-<!--            font-weight: 300;-->
-<!--            text-align: center;-->
-<!--            margin-bottom: 60px;-->
-<!--            color: #333;-->
-<!--            position: relative;-->
-<!--        }-->
-
-<!--        .section-title::after {-->
-<!--            content: '';-->
-<!--            position: absolute;-->
-<!--            width: 60px;-->
-<!--            height: 3px;-->
-<!--            background: linear-gradient(135deg, #667eea, #764ba2);-->
-<!--            bottom: -10px;-->
-<!--            left: 50%;-->
-<!--            transform: translateX(-50%);-->
-<!--            border-radius: 2px;-->
-<!--        }-->
-
-<!--        /* Updated Blog Card Styles */-->
-<!--        .blog-card {-->
-<!--            background: #fff;-->
-<!--            border-radius: 15px;-->
-<!--            overflow: hidden;-->
-<!--            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);-->
-<!--            transition: all 0.3s ease;-->
-<!--            border: 1px solid rgba(0, 0, 0, 0.05);-->
-<!--            margin-bottom: 40px;-->
-<!--            position: relative;-->
-<!--            display: flex;-->
-<!--            height: 280px;-->
-<!--        }-->
-
-<!--        .blog-card:hover {-->
-<!--            transform: translateY(-5px);-->
-<!--            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);-->
-<!--        }-->
-
-<!--        .blog-image-container {-->
-<!--            flex: 0 0 300px;-->
-<!--            position: relative;-->
-<!--            overflow: hidden;-->
-<!--        }-->
-
-<!--        .blog-image {-->
-<!--            width: 100%;-->
-<!--            height: 100%;-->
-<!--            object-fit: cover;-->
-<!--            transition: transform 0.4s ease;-->
-<!--        }-->
-
-<!--        .blog-card:hover .blog-image {-->
-<!--            transform: scale(1.05);-->
-<!--        }-->
-
-<!--        .blog-content {-->
-<!--            flex: 1;-->
-<!--            padding: 30px;-->
-<!--            display: flex;-->
-<!--            flex-direction: column;-->
-<!--            justify-content: space-between;-->
-<!--        }-->
-
-<!--        .blog-main-content {-->
-<!--            flex: 1;-->
-<!--        }-->
-
-<!--        .blog-title {-->
-<!--            font-size: 1.6rem;-->
-<!--            font-weight: 700;-->
-<!--            margin-bottom: 15px;-->
-<!--            color: #333;-->
-<!--            line-height: 1.3;-->
-<!--            text-transform: uppercase;-->
-<!--            letter-spacing: 0.5px;-->
-<!--        }-->
-
-<!--        .blog-excerpt {-->
-<!--            color: #666;-->
-<!--            font-size: 1rem;-->
-<!--            line-height: 1.6;-->
-<!--            margin-bottom: 0;-->
-<!--        }-->
-
-<!--        .blog-meta {-->
-<!--            display: flex;-->
-<!--            justify-content: space-between;-->
-<!--            align-items: center;-->
-<!--            padding-top: 20px;-->
-<!--            border-top: 1px solid #eee;-->
-<!--            font-size: 0.85rem;-->
-<!--            color: #999;-->
-<!--            margin-top: 20px;-->
-<!--        }-->
-
-<!--        .blog-author-info {-->
-<!--            display: flex;-->
-<!--            align-items: center;-->
-<!--            gap: 12px;-->
-<!--        }-->
-
-<!--        .author-avatar {-->
-<!--            width: 32px;-->
-<!--            height: 32px;-->
-<!--            border-radius: 50%;-->
-<!--            background: linear-gradient(135deg, #667eea, #764ba2);-->
-<!--            display: flex;-->
-<!--            align-items: center;-->
-<!--            justify-content: center;-->
-<!--            color: white;-->
-<!--            font-weight: bold;-->
-<!--            font-size: 0.8rem;-->
-<!--        }-->
-
-<!--        .author-details {-->
-<!--            display: flex;-->
-<!--            flex-direction: column;-->
-<!--            gap: 2px;-->
-<!--        }-->
-
-<!--        .author-name {-->
-<!--            font-weight: 600;-->
-<!--            color: #333;-->
-<!--            font-size: 0.9rem;-->
-<!--        }-->
-
-<!--        .blog-date {-->
-<!--            color: #999;-->
-<!--            font-size: 0.8rem;-->
-<!--        }-->
-
-<!--        .blog-stats {-->
-<!--            display: flex;-->
-<!--            align-items: center;-->
-<!--            gap: 15px;-->
-<!--        }-->
-
-<!--        .stat-item {-->
-<!--            display: flex;-->
-<!--            align-items: center;-->
-<!--            gap: 5px;-->
-<!--            color: #999;-->
-<!--            font-size: 0.85rem;-->
-<!--        }-->
-
-<!--        .like-btn {-->
-<!--            background: none;-->
-<!--            border: none;-->
-<!--            color: #e74c3c;-->
-<!--            cursor: pointer;-->
-<!--            transition: all 0.3s ease;-->
-<!--            display: flex;-->
-<!--            align-items: center;-->
-<!--            gap: 5px;-->
-<!--            font-size: 0.85rem;-->
-<!--        }-->
-
-<!--        .like-btn:hover {-->
-<!--            transform: scale(1.1);-->
-<!--            color: #c0392b;-->
-<!--        }-->
-
-<!--        /* No blogs message */-->
-<!--        .no-blogs {-->
-<!--            text-align: center;-->
-<!--            padding: 80px 20px;-->
-<!--            color: #666;-->
-<!--            font-size: 1.1rem;-->
-<!--        }-->
-
-<!--        /* Back button */-->
-<!--        .back-btn {-->
-<!--            background: linear-gradient(135deg, #667eea, #764ba2);-->
-<!--            color: white;-->
-<!--            border: none;-->
-<!--            padding: 12px 30px;-->
-<!--            border-radius: 30px;-->
-<!--            font-weight: 500;-->
-<!--            text-decoration: none;-->
-<!--            display: inline-flex;-->
-<!--            align-items: center;-->
-<!--            gap: 10px;-->
-<!--            transition: all 0.3s ease;-->
-<!--            margin-bottom: 30px;-->
-<!--        }-->
-
-<!--        .back-btn:hover {-->
-<!--            transform: translateY(-2px);-->
-<!--            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);-->
-<!--            color: white;-->
-<!--            text-decoration: none;-->
-<!--        }-->
-
-<!--        /* Responsive Design */-->
-<!--        @media (max-width: 992px) {-->
-<!--            .blog-card {-->
-<!--                flex-direction: column;-->
-<!--                height: auto;-->
-<!--            }-->
-
-<!--            .blog-image-container {-->
-<!--                flex: none;-->
-<!--                height: 200px;-->
-<!--            }-->
-
-<!--            .blog-meta {-->
-<!--                flex-direction: column;-->
-<!--                gap: 15px;-->
-<!--                align-items: flex-start;-->
-<!--            }-->
-
-<!--            .blog-stats {-->
-<!--                align-self: flex-end;-->
-<!--            }-->
-<!--        }-->
-
-<!--        @media (max-width: 768px) {-->
-<!--            .logo {-->
-<!--                font-size: 2.5rem;-->
-<!--                letter-spacing: 4px;-->
-<!--            }-->
-<!--            -->
-<!--            .hero-content {-->
-<!--                padding: 40px 30px;-->
-<!--            }-->
-<!--            -->
-<!--            .blog-content {-->
-<!--                padding: 25px;-->
-<!--            }-->
-<!--            -->
-<!--            .blog-title {-->
-<!--                font-size: 1.3rem;-->
-<!--            }-->
-<!--        }-->
-
-<!--        /* Animation */-->
-<!--        @keyframes fadeInUp {-->
-<!--            from {-->
-<!--                opacity: 0;-->
-<!--                transform: translateY(30px);-->
-<!--            }-->
-<!--            to {-->
-<!--                opacity: 1;-->
-<!--                transform: translateY(0);-->
-<!--            }-->
-<!--        }-->
-
-<!--        .blog-card {-->
-<!--            animation: fadeInUp 0.6s ease forwards;-->
-<!--        }-->
-
-<!--        .blog-card:nth-child(2) { animation-delay: 0.1s; }-->
-<!--        .blog-card:nth-child(3) { animation-delay: 0.2s; }-->
-<!--        .blog-card:nth-child(4) { animation-delay: 0.3s; }-->
-<!--    </style>-->
-<!--</head>-->
-<!--<body>-->
-
-<!--&lt;!&ndash; Navbar &ndash;&gt;-->
-<!--<nav class="navbar navbar-expand-lg">-->
-<!--    <div class="container">-->
-<!--        <a class="navbar-brand" href="#" style="color: #333; font-weight: 600;">-->
-<!--            <i class="fas fa-home" style="margin-right: 8px;"></i>-->
-<!--        </a>-->
-<!--        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">-->
-<!--            <span class="navbar-toggler-icon"></span>-->
-<!--        </button>-->
-<!--        <div class="collapse navbar-collapse" id="navbarNav">-->
-<!--            <ul class="navbar-nav me-auto">-->
-<!--                <li class="nav-item"><a class="nav-link" href="#">HOME</a></li>-->
-<!--                <li class="nav-item"><a class="nav-link" href="#">BLOG</a></li>-->
-<!--                <li class="nav-item"><a class="nav-link" href="#">PODCAST</a></li>-->
-<!--                <li class="nav-item"><a class="nav-link" href="#">ABOUT</a></li>-->
-<!--            </ul>-->
-<!--            <div class="d-flex gap-3">-->
-<!--                <i class="fab fa-instagram" style="color: #333; cursor: pointer;"></i>-->
-<!--                <i class="fab fa-pinterest" style="color: #333; cursor: pointer;"></i>-->
-<!--                <i class="fas fa-search" style="color: #333; cursor: pointer;"></i>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</nav>-->
-
-<!--&lt;!&ndash; Hero Section &ndash;&gt;-->
-<!--<div class="hero-section">-->
-<!--    <div class="container">-->
-<!--        <div class="row justify-content-center">-->
-<!--            <div class="col-lg-8">-->
-<!--                <div class="hero-content text-center">-->
-<!--                    <div class="logo">DESIGN FOR LIFE</div>-->
-<!--                    <div class="tagline">User Blog Collection</div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
-
-<!--&lt;!&ndash; Blog Section &ndash;&gt;-->
-<!--<div class="blog-section">-->
-<!--    <div class="container">-->
-<!--        <div class="row justify-content-center">-->
-<!--            <div class="col-lg-10">-->
-<!--                <a th:href="@{/user/home-page/show-all-blogs}" class="back-btn">-->
-<!--                    <i class="fas fa-arrow-left"></i>-->
-<!--                    Back to All Blogs-->
-<!--                </a>-->
-<!--                <h2 class="section-title">User Stories</h2>-->
-<!--                <div th:if="${#lists.isEmpty(blogList)}" class="no-blogs">-->
-<!--                    <i class="fas fa-pen-fancy" style="font-size: 3rem; margin-bottom: 20px; color: #ddd;"></i>-->
-<!--                    <p>This user hasn't published any stories yet. Check back soon for inspiring content!</p>-->
-<!--                </div>-->
-<!--                <div class="row" th:each="blog : ${blogList}">-->
-<!--                    <div class="col-12">-->
-<!--                        <article class="blog-card">-->
-<!--                            <div class="blog-image-container">-->
-<!--                                <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" -->
-<!--                                     class="blog-image" alt="Blog Image">-->
-<!--                            </div>-->
-<!--                            -->
-<!--                            <div class="blog-content">-->
-<!--                                <div class="blog-main-content">-->
-<!--                                    <h3 class="blog-title" th:text="${blog.title}">BLOG TITLE</h3>-->
-<!--                                    <p class="blog-excerpt" th:text="${#strings.abbreviate(blog.content, 120)}">-->
-<!--                                        Create a blog post subtitle that summarizes your post in a few short, punchy sentences and entices your audience to continue reading....-->
-<!--                                    </p>-->
-<!--                                </div>-->
-<!--                                -->
-<!--                                <div class="blog-meta">-->
-<!--                                    <div class="blog-author-info">-->
-<!--                                        <div class="author-avatar">-->
-<!--                                            &lt;!&ndash; Static value, can be replaced with th:text="${blog.author.initials}" or th:text="${#strings.substring(blog.author.name, 0, 1)}" &ndash;&gt;-->
-<!--                                            A-->
-<!--                                        </div>-->
-<!--                                        <div class="author-details">-->
-<!--                                            <div class="author-name">-->
-<!--                                                &lt;!&ndash; Static value, can be replaced with th:text="${blog.author.name}" &ndash;&gt;-->
-<!--                                                Admin-->
-<!--                                            </div>-->
-<!--                                            <div class="blog-date">-->
-<!--                                                &lt;!&ndash; Static value, can be replaced with th:text="${#dates.format(blog.createdDate, 'MMM dd, yyyy')}" &ndash;&gt;-->
-<!--                                                Mar 21, 2023-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-<!--                                    -->
-<!--                                    <div class="blog-stats">-->
-<!--                                        <div class="stat-item">-->
-<!--                                            <i class="far fa-eye"></i>-->
-<!--                                            &lt;!&ndash; Static value, can be replaced with th:text="${blog.viewCount}" &ndash;&gt;-->
-<!--                                            <span>0 views</span>-->
-<!--                                        </div>-->
-<!--                                        <div class="stat-item">-->
-<!--                                            <i class="far fa-comment"></i>-->
-<!--                                            &lt;!&ndash; Static value, can be replaced with th:text="${blog.commentCount}" &ndash;&gt;-->
-<!--                                            <span>0 comments</span>-->
-<!--                                        </div>-->
-<!--                                        <button class="like-btn">-->
-<!--                                            <i class="far fa-heart"></i>-->
-<!--                                            &lt;!&ndash; Static value, can be replaced with th:text="${blog.likeCount}" &ndash;&gt;-->
-<!--                                            <span>2</span>-->
-<!--                                        </button>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </article>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
-
-<!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>-->
-<!--</body>-->
-<!--</html>-->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>My Blogs</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Design For Life | Blog</title>
+
+    <!-- Include Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
     <style>
-        .blog-card {
-            border: 1px solid #eee;
-            border-radius: 12px;
-            overflow: hidden;
-            margin-bottom: 2rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        :root {
+            --primary-gradient: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            --secondary-gradient: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            --accent-gradient: linear-gradient(135deg, #fecaca 0%, #dc2626 100%);
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --text-light: #9ca3af;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f9fafb;
+            --bg-tertiary: #f3f4f6;
+            --border-color: #e5e7eb;
+            --border-light: #f3f4f6;
+            --shadow-light: 0 1px 3px rgba(0, 0, 0, 0.1);
+            --shadow-medium: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-heavy: 0 10px 15px rgba(0, 0, 0, 0.1);
+            --border-radius: 12px;
+            --border-radius-sm: 8px;
+            --transition: all 0.3s ease;
+            --red-50: #fef2f2;
+            --red-100: #fee2e2;
+            --red-600: #dc2626;
+            --red-700: #b91c1c;
+            --red-800: #991b1b;
         }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Clean, minimalist navbar */
+        .navbar {
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-light);
+            transition: var(--transition);
+            padding: 1rem 0;
+        }
+
+        .navbar-scrolled {
+            box-shadow: var(--shadow-medium);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--red-600);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .navbar-brand:hover {
+            color: var(--red-700);
+        }
+
+        .nav-link {
+            color: var(--text-primary) !important;
+            font-weight: 500;
+            margin: 0 0.5rem;
+            padding: 0.5rem 1rem !important;
+            border-radius: var(--border-radius-sm);
+            transition: var(--transition);
+            text-decoration: none;
+        }
+
+        .nav-link:hover {
+            background: var(--red-50);
+            color: var(--red-600) !important;
+        }
+
+        /* Clean hero section */
+        .hero-section {
+            background: var(--bg-primary);
+            padding: 5rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .hero-content {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 3.5rem;
+            font-weight: 200;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+            color: var(--red-600);
+        }
+
+        .tagline {
+            font-size: 1.2rem;
+            font-weight: 400;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Clean blog section */
+        .blog-section {
+            padding: 4rem 0;
+            background: var(--bg-secondary);
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 300;
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--text-primary);
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            width: 60px;
+            height: 2px;
+            background: var(--red-600);
+            bottom: -1rem;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* Minimalist blog cards */
+        .blog-card {
+            background: var(--bg-primary);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-light);
+            transition: var(--transition);
+            border: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+            display: flex;
+            min-height: 300px;
+        }
+
+        .blog-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-heavy);
+        }
+
+        .blog-image-container {
+            flex: 0 0 280px;
+            position: relative;
+            overflow: hidden;
+            background: var(--bg-tertiary);
+        }
+
         .blog-image {
             width: 100%;
-            height: auto;
+            height: 100%;
             object-fit: cover;
+            transition: var(--transition);
         }
+
+        .blog-card:hover .blog-image {
+            transform: scale(1.05);
+        }
+
         .blog-content {
-            padding: 1rem;
+            flex: 1;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
+
+        .blog-main-content {
+            flex-grow: 1;
+        }
+
+        .blog-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+            line-height: 1.3;
+        }
+
+        .blog-excerpt {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-read-more {
+            background: var(--red-600);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--border-radius-sm);
+            color: white;
+            font-weight: 500;
+            text-decoration: none;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            width: fit-content;
+        }
+
+        .btn-read-more:hover {
+            background: var(--red-700);
+            transform: translateY(-2px);
+            color: white;
+        }
+
+        /* Clean blog meta */
         .blog-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-light);
+            margin-top: 1.5rem;
+        }
+
+        .blog-author-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .author-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--red-600);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        .author-details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.125rem;
+        }
+
+        .author-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.875rem;
+        }
+
+        .blog-date {
+            color: var(--text-light);
+            font-size: 0.75rem;
+        }
+
+        /* Clean comments section */
+        .comments-section {
+            background: var(--bg-tertiary);
+            border-radius: var(--border-radius-sm);
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .comments-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .comment-item {
+            background: var(--bg-primary);
+            border-radius: var(--border-radius-sm);
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .comment-author {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.875rem;
+        }
+
+        .comment-text {
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+            font-size: 0.875rem;
+        }
+
+        .comment-form {
             margin-top: 1rem;
         }
+
+        .comment-form textarea {
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-sm);
+            padding: 0.75rem;
+            transition: var(--transition);
+            resize: vertical;
+        }
+
+        .comment-form textarea:focus {
+            border-color: var(--red-600);
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+            outline: none;
+        }
+
+        /* Clean like button */
+        .like-section {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
         .like-btn {
-            border: none;
             background: none;
+            border: none;
+            color: var(--red-600);
             cursor: pointer;
-            padding-left: 0;
-            color: #dc3545;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+            font-size: 0.875rem;
+            padding: 0.5rem;
+            border-radius: var(--border-radius-sm);
+        }
+
+        .like-btn:hover {
+            background: var(--red-50);
+        }
+
+        .like-btn.liked {
+            color: var(--red-600);
+        }
+
+        /* Clean no blogs message */
+        .no-blogs {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: var(--bg-primary);
+            border-radius: var(--border-radius);
+            border: 1px solid var(--border-color);
+        }
+
+        .no-blogs-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--red-600);
+        }
+
+        .no-blogs-text {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        /* Clean alert styles */
+        .alert {
+            border: none;
+            border-radius: var(--border-radius-sm);
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid;
+        }
+
+        .alert-success {
+            background: #f0fdf4;
+            color: #166534;
+            border-left-color: #16a34a;
+        }
+
+        .alert-danger {
+            background: var(--red-50);
+            color: var(--red-800);
+            border-left-color: var(--red-600);
+        }
+
+        /* Clean buttons */
+        .btn-outline-primary {
+            border-color: var(--red-600);
+            color: var(--red-600);
+            transition: var(--transition);
+            border-radius: var(--border-radius-sm);
+        }
+
+        .btn-outline-primary:hover {
+            background: var(--red-600);
+            border-color: var(--red-600);
+            color: white;
+        }
+
+        .btn-outline-danger {
+            border-color: var(--red-600);
+            color: var(--red-600);
+            transition: var(--transition);
+            border-radius: var(--border-radius-sm);
+        }
+
+        .btn-outline-danger:hover {
+            background: var(--red-600);
+            border-color: var(--red-600);
+            color: white;
+        }
+
+        .btn-outline-warning {
+            border-color: #d97706;
+            color: #d97706;
+            transition: var(--transition);
+            border-radius: var(--border-radius-sm);
+        }
+
+        .btn-outline-warning:hover {
+            background: #d97706;
+            border-color: #d97706;
+            color: white;
+        }
+
+        /* Clean scroll to top button */
+        .scroll-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--red-600);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-medium);
+            cursor: pointer;
+            transition: var(--transition);
+            opacity: 0;
+            transform: translateY(100px);
+            z-index: 1000;
+        }
+
+        .scroll-top.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .scroll-top:hover {
+            background: var(--red-700);
+            transform: translateY(-2px);
+        }
+
+        /* Clean social links */
+        .social-link {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            transition: var(--transition);
+            padding: 0.5rem;
+            border-radius: var(--border-radius-sm);
+        }
+
+        .social-link:hover {
+            color: var(--red-600);
+            background: var(--red-50);
+        }
+
+        /* Responsive design */
+        @media (max-width: 1200px) {
+            .blog-image-container {
+                flex: 0 0 240px;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .blog-card {
+                flex-direction: column;
+                min-height: auto;
+            }
+
+            .blog-image-container {
+                flex: none;
+                height: 200px;
+            }
+
+            .blog-meta {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+
+            .logo {
+                font-size: 2.5rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-section {
+                padding: 3rem 0;
+            }
+
+            .blog-content {
+                padding: 1.5rem;
+            }
+
+            .blog-title {
+                font-size: 1.25rem;
+            }
+
+            .logo {
+                font-size: 2rem;
+            }
+
+            .tagline {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero-section {
+                padding: 2rem 0;
+            }
+
+            .blog-section {
+                padding: 3rem 0;
+            }
+
+            .section-title {
+                font-size: 1.75rem;
+                margin-bottom: 2rem;
+            }
+
+            .blog-content {
+                padding: 1.25rem;
+            }
+
+            .comments-section {
+                padding: 1.25rem;
+            }
+
+            .navbar-brand {
+                font-size: 1.25rem;
+            }
+        }
+
+        /* Loading animation */
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
     </style>
 </head>
@@ -547,27 +598,31 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto">
-                <li class="nav-item"><a class="nav-link" th:href="@{/user/home-page/}">HOME</a></li>
-                <li class="nav-item"><a class="nav-link" th:href="@{/user/home-page/show-all-blogs}">ALL BLOGS</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/user/home-page/show-all-blogs}">HOME</a></li>
                 <li class="nav-item"><a class="nav-link" th:href="@{/user/home-page/add-blog/}">ADD BLOG</a></li>
             </ul>
             <div class="d-flex gap-3">
                 <a th:href="@{/user/home-page/logout}" class="btn btn-outline-danger">
                     <i class="fas fa-sign-out-alt"></i> Logout
                 </a>
-
             </div>
         </div>
     </div>
 </nav>
 
 <!-- Hero Section -->
-<div class="hero-section text-center my-4">
-    <h2>My Blogs</h2>
-    <p class="text-muted">All your blog posts are shown below.</p>
-</div>
-
-<!-- Blog Section -->
+<div class="hero-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="hero-content text-center py-4">
+                    <h1 class="logo">YOUR THOUGHTS</h1>
+                    <p class="tagline">Simple stories, meaningful connections, and authentic experiences</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div><!-- Blog Section -->
 <div class="container blog-section">
     <div class="text-end mb-3">
         <a th:href="@{/user/home-page/show-all-blogs}" class="btn btn-sm btn-secondary">
@@ -584,20 +639,18 @@
     <!-- Blog List -->
     <div class="row" th:each="blog : ${blogList}">
         <div class="col-12">
-            <article class="blog-card">
-                <div class="blog-image-container">
+            <article class="blog-card border p-3 mb-4 rounded shadow-sm">
+                <div class="blog-image-container mb-3">
                     <img th:src="${blog.imagePath != null ? blog.imagePath : '/default-blog.png'}"
-                         class="blog-image" alt="Blog Image">
+                         class="img-fluid rounded" alt="Blog Image">
                 </div>
                 <div class="blog-content">
                     <h3 class="blog-title" th:text="${blog.title}">Blog Title</h3>
-                    <p class="blog-excerpt" th:text="${#strings.abbreviate(blog.content, 120)}">
-                        Blog content preview...
-                    </p>
+                    <p class="blog-excerpt" th:text="${#strings.abbreviate(blog.content, 120)}">Blog content preview...</p>
+
                     <a th:href="@{'/user/home-page/show-full-blog/' + ${blog.blogId}}"
                        class="btn btn-sm btn-outline-primary mt-2">Read More</a>
 
-                    <!-- Metadata -->
                     <div class="blog-meta mt-3">
                         <div class="text-muted mb-2">
                             <i class="far fa-calendar-alt me-1"></i>
@@ -642,8 +695,13 @@
                             </button>
                         </form>
 
-                        <!-- Delete Blog Button: Visible only to blog owner -->
-                        <div th:if="${currentUserId != null and blog.user.userId == currentUserId}" class="pt-2">
+                        <!-- Edit & Delete Buttons (Only for Owner) -->
+                        <div th:if="${currentUserId != null and blog.user.userId == currentUserId}" class="pt-2 d-flex gap-2">
+                            <button class="btn btn-sm btn-warning" data-bs-toggle="modal"
+                                    th:attr="data-bs-target='#editModal_' + ${blog.blogId}">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+
                             <a th:href="@{'/user/home-page/delete-blog/' + ${blog.blogId}}"
                                onclick="return confirm('Are you sure you want to delete this blog?');"
                                class="btn btn-sm btn-danger">
@@ -653,10 +711,55 @@
                     </div>
                 </div>
             </article>
-        </div>
-    </div>
-</div>
 
+            <!-- Edit Modal -->
+            <div th:id="'editModal_' + ${blog.blogId}" class="modal fade" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <form th:action="@{'/user/home-page/update-blog/' + ${blog.blogId}}" method="post" enctype="multipart/form-data">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Edit Blog</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label>Title</label>
+                                    <input type="text" name="title" th:value="${blog.title}" class="form-control" required />
+                                </div>
+                                <div class="mb-3">
+                                    <label>Content</label>
+                                    <textarea name="content" class="form-control" rows="5" required th:text="${blog.content}"></textarea>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label>Replace Image (optional)</label>
+                                    <input type="file" name="imageFile" class="form-control" />
+                                </div>
+                                <div class="mb-3">
+                                    <label>Current Image</label><br>
+                                    <img th:src="${blog.imagePath != null ? blog.imagePath : '/default-blog.png'}"
+                                         class="img-fluid rounded" style="max-height: 200px;" alt="Current Image" />
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-success">Save Changes</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> <!-- end of .row -->
+</div> <!-- end of .container -->
+
+<!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+<script>
+    document.addEventListener('input', function (e) {
+        if (e.target.tagName.toLowerCase() === 'textarea') {
+            e.target.style.height = 'auto';
+            e.target.style.height = (e.target.scrollHeight) + 'px';
+        }
+    }, false);
+</script>
