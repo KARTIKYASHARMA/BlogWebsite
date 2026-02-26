@@ -22,7 +22,7 @@ BlogWebsite is a web application built using Spring Boot, Thymeleaf, and MySQL. 
 - Maven
 
 ## Project Structure
-
+```
 src
 ├── main
 │ ├── java
@@ -38,6 +38,7 @@ src
 │ ├── templates
 │ └── application.properties
 └── test
+```
 
 ## How to Run
 
